@@ -1,0 +1,3039 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ahmed Nasri — Portfolio BTS SIO SLAM</title>
+  <style>
+    :root {
+      --bg: #07101d;
+      --bg-2: #0c1627;
+      --bg-3: #101c31;
+      --panel: rgba(255,255,255,0.05);
+      --panel-2: rgba(255,255,255,0.07);
+      --line: rgba(255,255,255,0.11);
+      --line-strong: rgba(255,255,255,0.18);
+      --text: #edf4ff;
+      --muted: #a7b5cc;
+      --muted-2: #8190a8;
+      --green: #8df6b0;
+      --cyan: #83dcff;
+      --purple: #c8a8ff;
+      --gold: #ffe08c;
+      --red: #ff9c9c;
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 18px;
+      --shadow: 0 24px 70px rgba(0,0,0,0.35);
+      --container: 1280px;
+      --header: 88px;
+      --transition: 240ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 8% 10%, rgba(141,246,176,0.10), transparent 24%),
+        radial-gradient(circle at 88% 12%, rgba(131,220,255,0.10), transparent 26%),
+        radial-gradient(circle at 40% 85%, rgba(200,168,255,0.08), transparent 24%),
+        linear-gradient(180deg, #060b15 0%, #09111d 36%, #07101d 100%);
+      line-height: 1.55;
+      overflow-x: hidden;
+    }
+
+    body.locked { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font: inherit; }
+    img { display: block; max-width: 100%; }
+
+    .bg-grid,
+    .noise,
+    .orbs {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -4;
+    }
+
+    .bg-grid {
+      background:
+        linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+      background-size: 34px 34px;
+      opacity: 0.16;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,.2), rgba(0,0,0,.85));
+    }
+
+    .noise {
+      background-image: radial-gradient(rgba(255,255,255,.04) .8px, transparent .8px);
+      background-size: 8px 8px;
+      mix-blend-mode: soft-light;
+      opacity: .16;
+    }
+
+    .orbs::before,
+    .orbs::after {
+      content: "";
+      position: absolute;
+      width: 42vw;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      filter: blur(95px);
+      opacity: .13;
+      animation: floatOrb 16s ease-in-out infinite;
+    }
+
+    .orbs::before {
+      left: -8vw;
+      top: -12vh;
+      background: linear-gradient(135deg, var(--green), transparent 60%);
+    }
+
+    .orbs::after {
+      right: -8vw;
+      top: 18vh;
+      background: linear-gradient(135deg, var(--cyan), transparent 60%);
+      animation-direction: reverse;
+      animation-duration: 18s;
+    }
+
+    @keyframes floatOrb {
+      0%,100% { transform: translate3d(0,0,0) scale(1); }
+      50% { transform: translate3d(0,18px,0) scale(1.06); }
+    }
+
+    .container {
+      width: min(var(--container), calc(100% - 32px));
+      margin-inline: auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: var(--header);
+      display: flex;
+      align-items: center;
+      background: rgba(7,16,29,0.74);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      transition: background var(--transition), box-shadow var(--transition), border-color var(--transition);
+    }
+
+    .site-header.scrolled {
+      background: rgba(7,16,29,0.92);
+      border-color: rgba(255,255,255,0.10);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.22);
+    }
+
+    .header-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      width: 100%;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .brand-badge {
+      width: 50px;
+      height: 50px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.12);
+      font-weight: 900;
+      letter-spacing: .16em;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    .brand-meta strong {
+      display: block;
+      font-size: .96rem;
+    }
+
+    .brand-meta span {
+      display: block;
+      color: var(--muted);
+      font-size: .83rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .main-nav {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 999px;
+      padding: 8px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .main-nav a {
+      padding: 12px 16px;
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: .92rem;
+      transition: background var(--transition), color var(--transition), transform var(--transition);
+    }
+
+    .main-nav a:hover,
+    .main-nav a.active {
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .button,
+    .ghost-btn,
+    .chip,
+    .mini-link,
+    .tab-btn,
+    .close-btn,
+    .menu-toggle {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      transition: transform var(--transition), background var(--transition), border-color var(--transition), box-shadow var(--transition);
+      white-space: nowrap;
+    }
+
+    .button:hover,
+    .mini-link:hover,
+    .tab-btn:hover,
+    .ghost-btn:hover,
+    .chip:hover {
+      transform: translateY(-2px);
+    }
+
+    .button.primary {
+      color: #07111d;
+      background: linear-gradient(135deg, #ffffff, #dbfbe6 55%, #d6f2ff);
+      box-shadow: 0 12px 34px rgba(214,242,255,0.14);
+    }
+
+    .button.secondary,
+    .ghost-btn {
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      position: relative;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: var(--text);
+    }
+
+    .menu-toggle span,
+    .menu-toggle span::before,
+    .menu-toggle span::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 18px;
+      height: 2px;
+      border-radius: 999px;
+      background: currentColor;
+      transform: translate(-50%, -50%);
+      transition: transform var(--transition), opacity var(--transition), background var(--transition);
+    }
+
+    .menu-toggle span::before { transform: translate(-50%, calc(-50% - 6px)); }
+    .menu-toggle span::after { transform: translate(-50%, calc(-50% + 6px)); }
+    .menu-toggle.is-open span { background: transparent; }
+    .menu-toggle.is-open span::before { transform: translate(-50%, -50%) rotate(45deg); }
+    .menu-toggle.is-open span::after { transform: translate(-50%, -50%) rotate(-45deg); }
+
+    .mobile-panel {
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      top: calc(var(--header) + 10px);
+      background: rgba(7,16,29,0.96);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 24px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+      z-index: 95;
+      display: none;
+      backdrop-filter: blur(18px);
+    }
+
+    .mobile-panel.open { display: block; animation: fadeUp .22s ease; }
+    .mobile-panel a { width: 100%; justify-content: flex-start; margin-bottom: 8px; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+    main section {
+      padding: 100px 0;
+      scroll-margin-top: calc(var(--header) + 14px);
+    }
+
+    .section-header {
+      max-width: 860px;
+      margin-bottom: 40px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: .78rem;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.34));
+    }
+
+    h1, h2, h3, h4 { margin: 0; }
+
+    .section-header h2 {
+      font-size: clamp(2rem, 4vw, 3.7rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .section-header p {
+      margin: 18px 0 0;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 1.02rem;
+    }
+
+    .hero {
+      min-height: calc(100vh - var(--header));
+      display: flex;
+      align-items: center;
+      padding-top: 54px;
+    }
+
+    .hero-grid,
+    .about-grid,
+    .contact-grid,
+    .veille-grid,
+    .grid-2,
+    .grid-3,
+    .skill-wrap,
+    .proof-grid,
+    .realization-grid,
+    .detail-grid,
+    .gallery-grid,
+    .resource-grid {
+      display: grid;
+      gap: 22px;
+    }
+
+    .hero-grid { grid-template-columns: 1.12fr .88fr; align-items: center; }
+    .about-grid, .contact-grid, .veille-grid, .detail-grid { grid-template-columns: 1fr 1fr; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .grid-3, .skill-wrap, .proof-grid, .realization-grid, .gallery-grid, .resource-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+
+    .hero-card,
+    .panel,
+    .project-card,
+    .realization-card,
+    .proof-card,
+    .skill-card,
+    .resource-card,
+    .detail-card,
+    .code-card,
+    .gallery-card,
+    .contact-box,
+    .modal-shell {
+      position: relative;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03)),
+        rgba(255,255,255,0.02);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-card::before,
+    .panel::before,
+    .project-card::before,
+    .realization-card::before,
+    .proof-card::before,
+    .skill-card::before,
+    .resource-card::before,
+    .detail-card::before,
+    .gallery-card::before,
+    .modal-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(255,255,255,0.07), transparent 34%, transparent 66%, rgba(255,255,255,0.03));
+      pointer-events: none;
+    }
+
+    .hero-copy,
+    .panel,
+    .project-card,
+    .realization-card,
+    .proof-card,
+    .skill-card,
+    .resource-card,
+    .detail-card,
+    .gallery-card,
+    .modal-shell {
+      padding: 28px;
+    }
+
+    .hero-copy { padding: 42px; }
+
+    .badge-inline,
+    .pill,
+    .chip,
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+      font-weight: 700;
+    }
+
+    .badge-inline {
+      padding: 10px 16px;
+      font-size: .9rem;
+      color: #ddffe8;
+      background: rgba(141,246,176,.11);
+      border: 1px solid rgba(141,246,176,.22);
+    }
+
+    .hero h1 {
+      margin: 24px 0 18px;
+      font-size: clamp(2.7rem, 6vw, 5.8rem);
+      line-height: .98;
+      letter-spacing: -.06em;
+      max-width: 10.5ch;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #ffffff 0%, #d1fae2 34%, #bdefff 66%, #dcc8ff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .lead {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.9;
+      max-width: 760px;
+      font-size: 1.05rem;
+    }
+
+    .hero-actions,
+    .filter-row,
+    .tags,
+    .link-row,
+    .list-inline,
+    .tab-row,
+    .meta-row,
+    .modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .hero-actions { margin-top: 28px; }
+
+    .hero-stats {
+      margin-top: 34px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 12px;
+    }
+
+    .stat-card,
+    .mini-card,
+    .bullet-item,
+    .contact-box,
+    .code-header,
+    .code-toolbar,
+    .table-wrap,
+    .screenshot-box,
+    .timeline-content,
+    .note-box,
+    .resource-list,
+    .accordion-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+    }
+
+    .stat-card { padding: 18px 16px; }
+    .stat-card strong { display: block; font-size: 1.56rem; letter-spacing: -.04em; }
+    .stat-card span { display: block; margin-top: 4px; color: var(--muted); font-size: .88rem; }
+
+    .hero-side { padding: 0; }
+
+    .hero-feature {
+      display: flex;
+      flex-direction: column;
+      min-height: 640px;
+    }
+
+    .hero-feature-top {
+      padding: 28px 28px 22px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+    }
+
+    .icon-box {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      font-size: 1.25rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    .hero-feature-top h3 { margin: 12px 0 6px; font-size: 2rem; line-height: 1.08; }
+    .hero-feature-top p { margin: 0; color: var(--muted); }
+
+    .hero-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 1px;
+      background: rgba(255,255,255,0.08);
+      margin-top: auto;
+    }
+
+    .hero-feature-cell {
+      padding: 20px;
+      background: rgba(7,16,29,0.76);
+    }
+
+    .hero-feature-cell strong { display: block; font-size: 1.34rem; }
+    .hero-feature-cell span { display: block; margin-top: 6px; color: var(--muted); font-size: .9rem; }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .mini-card { padding: 18px; }
+    .mini-card strong { display: block; margin-top: 12px; font-size: 1rem; }
+    .mini-card p { margin: 8px 0 0; color: var(--muted); line-height: 1.75; }
+
+    .timeline {
+      position: relative;
+      padding-left: 18px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 9px;
+      top: 6px;
+      bottom: 6px;
+      width: 1px;
+      background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.04));
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 28px;
+      margin-bottom: 22px;
+    }
+
+    .timeline-item:last-child { margin-bottom: 0; }
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 20px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #0b1323;
+      border: 1px solid rgba(255,255,255,.20);
+      box-shadow: 0 0 0 6px rgba(255,255,255,.02);
+    }
+
+    .timeline-content { padding: 24px; }
+
+    .timeline-head,
+    .card-top,
+    .formation-top,
+    .callout,
+    .modal-top,
+    .detail-top,
+    .gallery-top,
+    .resource-top,
+    .proof-top,
+    .table-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .timeline-head strong,
+    .card-title { font-size: 1.08rem; line-height: 1.35; }
+    .timeline-head span,
+    .card-subtitle { color: var(--muted); font-size: .92rem; }
+    .card-copy { color: var(--muted); line-height: 1.8; margin: 0 0 16px; }
+
+    .pill,
+    .chip {
+      min-height: 34px;
+      padding: 0 12px;
+      font-size: .82rem;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+    }
+
+    .pill.green, .chip.green { background: rgba(141,246,176,.10); color: #e3ffeb; border-color: rgba(141,246,176,.22); }
+    .pill.cyan, .chip.cyan { background: rgba(131,220,255,.10); color: #e3f9ff; border-color: rgba(131,220,255,.22); }
+    .pill.purple, .chip.purple { background: rgba(200,168,255,.10); color: #f3eaff; border-color: rgba(200,168,255,.22); }
+    .pill.gold, .chip.gold { background: rgba(255,224,140,.10); color: #fff3d3; border-color: rgba(255,224,140,.22); }
+    .pill.red, .chip.red { background: rgba(255,156,156,.10); color: #ffe3e3; border-color: rgba(255,156,156,.22); }
+
+    .realization-card,
+    .project-card,
+    .proof-card,
+    .skill-card,
+    .resource-card,
+    .gallery-card {
+      height: 100%;
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition), background var(--transition);
+    }
+
+    .realization-card:hover,
+    .project-card:hover,
+    .proof-card:hover,
+    .skill-card:hover,
+    .resource-card:hover,
+    .gallery-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.05);
+      box-shadow: 0 28px 70px rgba(0,0,0,0.34);
+    }
+
+    .card-icon {
+      flex: 0 0 auto;
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      font-size: 1.2rem;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .mini-link,
+    .tab-btn,
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 0 14px;
+      border-radius: 14px;
+      color: var(--text);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      transition: transform var(--transition), background var(--transition), border-color var(--transition);
+    }
+
+    .mini-link.primary-lite {
+      color: #dffded;
+      background: rgba(141,246,176,.08);
+      border-color: rgba(141,246,176,.18);
+    }
+
+    .mini-link.cyan-lite {
+      color: #def7ff;
+      background: rgba(131,220,255,.08);
+      border-color: rgba(131,220,255,.18);
+    }
+
+    .mini-link.purple-lite {
+      color: #f0e6ff;
+      background: rgba(200,168,255,.08);
+      border-color: rgba(200,168,255,.18);
+    }
+
+    .formation-top {
+      align-items: end;
+      margin-bottom: 40px;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 56px;
+      padding: 0 18px;
+      border-radius: 18px;
+      width: min(100%, 460px);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+    }
+
+    .search-bar input {
+      width: 100%;
+      background: transparent;
+      border: 0;
+      outline: none;
+      color: var(--text);
+    }
+
+    .search-bar input::placeholder { color: var(--muted-2); }
+
+    .bullet-list { display: grid; gap: 12px; }
+    .bullet-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .dot {
+      margin-top: 9px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex: 0 0 auto;
+      background: linear-gradient(135deg, var(--green), var(--cyan));
+    }
+
+    .callout {
+      margin-top: 24px;
+      padding: 22px 24px;
+      border-radius: 24px;
+      border: 1px dashed rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .callout p { margin: 0; color: var(--muted); max-width: 880px; }
+
+    .filter-row { margin-bottom: 22px; }
+
+    .chip.active,
+    .tab-btn.active {
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.16);
+      color: var(--text);
+    }
+
+    .proof-section {
+      display: grid;
+      gap: 22px;
+    }
+
+    .gallery-thumb,
+    .placeholder-img {
+      aspect-ratio: 16 / 10;
+      border-radius: 18px;
+      border: 1px dashed rgba(255,255,255,0.12);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03)),
+        repeating-linear-gradient(45deg, rgba(255,255,255,0.02), rgba(255,255,255,0.02) 10px, transparent 10px, transparent 20px);
+      display: grid;
+      place-items: center;
+      color: var(--muted-2);
+      font-size: .92rem;
+      text-align: center;
+      padding: 18px;
+    }
+
+    .table-wrap {
+      overflow: hidden;
+      margin-top: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      color: var(--text);
+    }
+
+    th, td {
+      text-align: left;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      vertical-align: top;
+      font-size: .95rem;
+    }
+
+    th { color: #f2f7ff; font-size: .9rem; letter-spacing: .02em; }
+    td { color: var(--muted); }
+    tr:last-child td { border-bottom: 0; }
+
+    .code-card {
+      background: #0a1220;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: var(--shadow);
+    }
+
+    .code-header,
+    .code-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: 0;
+      background: rgba(255,255,255,0.04);
+      border: 0;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .window-dots {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .window-dots span {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .window-dots span:nth-child(1) { background: #ff7e79; }
+    .window-dots span:nth-child(2) { background: #ffd56f; }
+    .window-dots span:nth-child(3) { background: #6fe9a1; }
+
+    .code-title {
+      font-size: .9rem;
+      color: var(--muted);
+    }
+
+    pre {
+      margin: 0;
+      padding: 22px;
+      overflow: auto;
+      color: #dce9ff;
+      font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+      font-size: .92rem;
+      line-height: 1.7;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    }
+
+    .keyword { color: #8fd1ff; }
+    .string { color: #ffd897; }
+    .comment { color: #7f93b2; }
+    .fn { color: #bba3ff; }
+    .var { color: #b8ffcf; }
+
+    .contact-card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 16px;
+      height: 100%;
+    }
+
+    .contact-box { padding: 20px; }
+    .contact-box strong { display: flex; align-items: center; gap: 10px; font-size: 1rem; }
+    .contact-box p { margin: 12px 0 0; color: var(--muted); line-height: 1.8; }
+
+    footer {
+      padding: 30px 0 60px;
+      color: var(--muted-2);
+      font-size: .92rem;
+    }
+
+    .footer-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      padding-top: 26px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity 650ms ease, transform 650ms ease;
+    }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 80ms; }
+    .delay-2 { transition-delay: 140ms; }
+    .delay-3 { transition-delay: 200ms; }
+    .delay-4 { transition-delay: 260ms; }
+
+    .detail-view {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(6,11,18,0.84);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: none;
+      padding: 22px;
+    }
+
+    .detail-view.open { display: block; animation: fadeIn .22s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-shell {
+      width: min(1400px, 100%);
+      height: calc(100vh - 44px);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      background: linear-gradient(180deg, rgba(11,18,31,0.96), rgba(7,13,24,0.98));
+    }
+
+    .modal-top {
+      padding: 22px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      align-items: center;
+    }
+
+    .modal-top h3 {
+      font-size: clamp(1.5rem, 2vw, 2.2rem);
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .modal-top p { margin: 0; color: var(--muted); max-width: 900px; }
+
+    .close-btn {
+      width: 50px;
+      height: 50px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: var(--text);
+      flex: 0 0 auto;
+    }
+
+    .modal-body {
+      padding: 24px;
+      overflow: auto;
+      height: 100%;
+    }
+
+    .modal-section + .modal-section { margin-top: 24px; }
+
+    .detail-card h4,
+    .gallery-card h4,
+    .resource-card h4 { margin-bottom: 12px; font-size: 1.04rem; }
+
+    .note-box {
+      padding: 18px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .resource-list {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .resource-list .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      color: var(--muted);
+    }
+
+    .resource-list .row:last-child { border-bottom: 0; }
+
+    .accordion-item { overflow: hidden; }
+    .accordion-trigger {
+      width: 100%;
+      background: transparent;
+      color: var(--text);
+      border: 0;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      cursor: pointer;
+    }
+
+    .accordion-trigger span:last-child {
+      color: var(--muted);
+      transition: transform var(--transition);
+    }
+
+    .accordion-item.open .accordion-trigger span:last-child { transform: rotate(45deg); }
+
+    .accordion-content {
+      display: none;
+      padding: 0 20px 18px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .accordion-item.open .accordion-content { display: block; }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 1180px) {
+      .hero-grid,
+      .about-grid,
+      .contact-grid,
+      .veille-grid,
+      .grid-3,
+      .skill-wrap,
+      .proof-grid,
+      .realization-grid,
+      .detail-grid,
+      .gallery-grid,
+      .resource-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .hero-stats { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+
+    @media (max-width: 980px) {
+      .main-nav,
+      .header-actions .button.secondary { display: none; }
+      .menu-toggle { display: inline-flex; }
+
+      .hero-grid,
+      .about-grid,
+      .contact-grid,
+      .veille-grid,
+      .grid-2,
+      .grid-3,
+      .skill-wrap,
+      .proof-grid,
+      .realization-grid,
+      .detail-grid,
+      .gallery-grid,
+      .resource-grid,
+      .contact-card-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .formation-top,
+      .callout,
+      .detail-top,
+      .gallery-top,
+      .resource-top,
+      .proof-top,
+      .table-head,
+      .timeline-head,
+      .card-top,
+      .modal-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-copy,
+      .panel,
+      .project-card,
+      .realization-card,
+      .proof-card,
+      .skill-card,
+      .resource-card,
+      .detail-card,
+      .gallery-card,
+      .modal-shell,
+      .modal-body {
+        padding: 22px;
+      }
+
+      .hero-feature { min-height: auto; }
+      .modal-shell { height: calc(100vh - 44px); }
+    }
+
+    @media (max-width: 680px) {
+      :root { --header: 78px; }
+      main section { padding: 82px 0; }
+      .container { width: min(var(--container), calc(100% - 20px)); }
+      .hero { padding-top: 24px; }
+      .hero h1 { font-size: clamp(2.1rem, 12vw, 3.4rem); }
+      .lead, .section-header p { font-size: .98rem; }
+      .hero-actions { flex-direction: column; }
+      .button { width: 100%; }
+      .mini-grid,
+      .hero-stats,
+      .hero-feature-grid { grid-template-columns: 1fr; }
+      .detail-view { padding: 10px; }
+      .modal-shell { height: calc(100vh - 20px); }
+
+
+  .image-grid{
+    display:grid;
+      grid-template-columns:1fr 1fr;
+    gap:15px;
+    margin-top:15px;
+}
+
+.portfolio-img{
+width:100%;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+}
+
+  
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="orbs"></div>
+  <div class="noise"></div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="container header-wrap">
+      <a class="brand" href="#accueil">
+        <div class="brand-badge">AN</div>
+        <div class="brand-meta">
+          <strong>Ahmed Nasri</strong>
+          <span>Portfolio BTS SIO — option SLAM</span>
+        </div>
+      </a>
+
+      <nav class="main-nav" aria-label="Navigation principale">
+        <a href="#accueil">Accueil</a>
+        <a href="#apropos">À propos</a>
+        <a href="#parcours">Parcours</a>
+        <a href="#stages">Stages</a>
+        <a href="#formation">Formation</a>
+        <a href="#competences">Compétences</a>
+        <a href="#veille">Veille</a>
+        <a href="#preuves">Preuves</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <a class="button secondary" href="#preuves">Voir les preuves</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Ouvrir le menu mobile" aria-expanded="false"><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-panel" id="mobilePanel">
+    <a class="button secondary" href="#accueil">Accueil</a>
+    <a class="button secondary" href="#apropos">À propos</a>
+    <a class="button secondary" href="#parcours">Parcours</a>
+    <a class="button secondary" href="#stages">Stages</a>
+    <a class="button secondary" href="#formation">Formation</a>
+    <a class="button secondary" href="#competences">Compétences</a>
+    <a class="button secondary" href="#veille">Veille</a>
+    <a class="button secondary" href="#preuves">Preuves</a>
+    <a class="button secondary" href="#contact">Contact</a>
+  </div>
+
+  <main>
+    <section class="hero" id="accueil">
+      <div class="container hero-grid">
+        <article class="hero-card reveal is-visible">
+          <div class="hero-copy">
+            <div class="badge-inline">● Portfolio de professionnalisation — BTS SIO SLAM</div>
+            <h1>Solutions Logicielles & <span class="gradient-text">Automatisation de Processus</span></h1>
+            <p class="lead">
+            <p>Bienvenue sur mon espace professionnel. Ce portfolio regroupe l'ensemble des missions techniques réalisées lors de mes stages et de ma formation. Découvrez ma démarche de <strong>conception applicative</strong>, mes projets de <strong>développement Fullstack</strong> et mes scripts d'<strong>automatisation</strong>.</p>
+            </p>
+            <div class="hero-actions">
+              <a class="button primary" href="#stages">Voir mes stages</a>
+              <a class="button secondary" href="#formation">Voir mes projets</a>
+            </div>
+            <div class="hero-stats">
+              <div class="stat-card"><strong>2</strong><span>Stages</span></div>
+              <div class="stat-card"><strong>8+</strong><span>Projets de formation</span></div>
+              <div class="stat-card"><strong>20+</strong><span>Réalisations détaillées</span></div>
+              <div class="stat-card"><strong>SLAM</strong><span>Développement</span></div>
+            </div>
+          </div>
+        </article>
+
+        <aside class="hero-card hero-side reveal delay-1 is-visible">
+          <div class="hero-feature">
+            <div class="hero-feature-top">
+              <div class="icon-box">📸</div>
+              <h3>Projet phare : Photomaton</h3>
+              <p>
+                Application web orientée photomaton avec Flask, SQLite, gestion des utilisateurs, rôles, prompts, images, fichiers et débogage. Cette partie sert de support principal pour montrer mon niveau de développement pendant le BTS.
+              </p>
+            </div>
+            <div class="hero-feature-grid">
+              <div class="hero-feature-cell">
+                <strong>Flask</strong>
+                <span>Routes, formulaires, logique applicative et sessions</span>
+              </div>
+              <div class="hero-feature-cell">
+                <strong>SQLite</strong>
+                <span>Modèle de données, tables, relations et stockage</span>
+              </div>
+              <div class="hero-feature-cell">
+                <strong>Rôles</strong>
+                <span>Admin / utilisateur, affichage conditionnel et sécurité</span>
+              </div>
+              <div class="hero-feature-cell">
+                <strong>Debug</strong>
+                <span>Logs, tests manuels, corrections et amélioration continue</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="apropos">
+      <div class="container about-grid">
+        <div class="panel reveal">
+          <div class="section-header" style="margin-bottom:0;">
+            <div class="eyebrow">À propos</div>
+            <h2>Concevoir, optimiser et industrialiser</h2>
+            <p>
+              
+              Ce portfolio n'est pas qu'une vitrine, c'est le reflet de ma démarche d'analyste-développeur. Mon objectif est de transformer des besoins métiers en solutions logicielles fiables. Vous trouverez ici mes projets de développement Fullstack, mes scripts d'automatisation et mes méthodologies de debug, illustrant ma capacité à gérer le cycle de vie complet d'une application, de sa conception à sa mise en production.
+            </p>
+          </div>
+        </div>
+
+        <div class="panel reveal delay-1">
+          <div class="mini-grid">
+            <div class="mini-card">
+              <div class="icon-box">💻</div>
+              <strong>Développement</strong>
+              <p>Applications web, logique métier, base de données, gestion des rôles et maintenance applicative.</p>
+            </div>
+            <div class="mini-card">
+              <div class="icon-box">🧠</div>
+              <strong>Professionnalisation</strong>
+              <p>Un premier stage orienté support/maintenance, puis un second bien plus riche techniquement autour d’un vrai projet applicatif.</p>
+            </div>
+            <div class="mini-card">
+              <div class="icon-box">📂</div>
+              <strong>Organisation</strong>
+              <p>Réalisations visibles rapidement, puis fiches détaillées avec images, code, synthèse BTS et preuves exploitables.</p>
+            </div>
+            <div class="mini-card">
+              <div class="icon-box">🎯</div>
+              <strong>Objectif</strong>
+              <p>Présenter mes activités pour l’épreuve, défendre mes choix techniques et montrer un vrai niveau d’implication.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="parcours">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="eyebrow">Parcours</div>
+          <h2>Mon parcours de professionnalisation</h2>
+          <p>
+            Une lecture simple de mon évolution pendant le BTS : acquisition des bases en formation, premier stage orienté maintenance, puis stage de deuxième année beaucoup plus complet autour du développement du projet Photomaton.
+          </p>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-item reveal">
+            <div class="timeline-content">
+              <div class="timeline-head">
+                <div>
+                  <strong>BTS SIO option SLAM</strong>
+                  <span>Développement, base de données, conception, maintenance et professionnalisation</span>
+                </div>
+                <span class="pill cyan">2024 — 2026</span>
+              </div>
+              <p class="card-copy">
+                Formation centrée sur la conception et le développement d’applications, la structuration des données, la maintenance logicielle, la sécurisation de base et l’analyse des besoins métier.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item reveal delay-1">
+            <div class="timeline-content">
+              <div class="timeline-head">
+                <div>
+                  <strong>Stage de première année — Booster Informatique</strong>
+                  <span>Toulouse — diagnostic, maintenance, logiciels, réseau</span>
+                </div>
+                <span class="pill gold">Support / maintenance</span>
+              </div>
+              <p class="card-copy">
+                Découverte du fonctionnement d’un environnement professionnel orienté maintenance : diagnostic de pannes, tests, installation de logiciels et vérification de la connectivité réseau.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item reveal delay-2">
+            <div class="timeline-content">
+              <div class="timeline-head">
+                <div>
+                  <strong>Stage de deuxième année — Projet Photomaton</strong>
+                  <span>Développement web, gestion des données, rôles et débogage</span>
+                </div>
+                <span class="pill green">Flask / SQLite / web app</span>
+              </div>
+              <p class="card-copy">
+                Travail bien plus poussé sur une application : gestion des utilisateurs, prompts, images, sessions, droits d’accès, correction de bugs et structuration de la base SQLite.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="stages">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="eyebrow">Stages</div>
+          <h2>Réalisations en milieu professionnel</h2>
+          <p>
+            Cette partie reprend les deux stages de manière claire. Chaque carte donne une idée de l’activité, puis le bouton « Voir réalisation » ouvre une fiche détaillée avec captures, explication, code ou procédure, compétences BTS et éléments de preuve.
+          </p>
+        </div>
+
+        <div class="panel reveal">
+          <div class="card-top" style="margin-bottom: 28px; align-items:center;">
+            <div class="card-icon">🛠️</div>
+            <div>
+              <h3 class="card-title" style="font-size:1.55rem;">Stage 1 — Booster Informatique</h3>
+              <p class="card-subtitle">Maintenance, diagnostic, logiciels et environnement réseau</p>
+            </div>
+          </div>
+
+          <div class="realization-grid">
+            <article class="realization-card reveal" data-category="stage1">
+              <div class="card-top"><div class="card-icon">🔎</div><div><h4 class="card-title">Diagnostic de pannes sur des postes informatiques</h4><p class="card-subtitle">Analyse, vérification, tests matériels et logiciels</p></div></div>
+              <p class="card-copy">Participation au diagnostic de pannes sur des ordinateurs avec observation du symptôme, vérification des composants et essais de fonctionnement avant intervention.</p>
+              <div class="tags"><span class="pill gold">Répondre aux incidents</span><span class="pill cyan">Gérer le patrimoine informatique</span></div>
+              <div class="link-row"><button class="mini-link primary-lite open-detail" data-detail="stage1-diagnostic">👁 Voir réalisation</button></div>
+            </article>
+
+            <article class="realization-card reveal delay-1" data-category="stage1">
+              <div class="card-top"><div class="card-icon">⚙️</div><div><h4 class="card-title">Installation et configuration de logiciels</h4><p class="card-subtitle">Mise en place d’outils nécessaires sur les postes</p></div></div>
+              <p class="card-copy">Installation et configuration de logiciels adaptés aux besoins du poste ou du client, puis vérification du bon lancement et de la compatibilité générale.</p>
+              <div class="tags"><span class="pill green">Mettre à disposition un service</span><span class="pill cyan">Gérer le patrimoine informatique</span></div>
+              <div class="link-row"><button class="mini-link primary-lite open-detail" data-detail="stage1-installation">👁 Voir réalisation</button></div>
+            </article>
+
+            <article class="realization-card reveal delay-2" data-category="stage1">
+              <div class="card-top"><div class="card-icon">✅</div><div><h4 class="card-title">Vérification du fonctionnement après intervention</h4><p class="card-subtitle">Contrôle du système, des périphériques et du réseau</p></div></div>
+              <p class="card-copy">Tests complets après réparation ou configuration pour vérifier que le système démarre correctement, que les périphériques répondent et que la connectivité réseau est opérationnelle.</p>
+              <div class="tags"><span class="pill cyan">Gérer le patrimoine informatique</span></div>
+              <div class="link-row"><button class="mini-link primary-lite open-detail" data-detail="stage1-tests">👁 Voir réalisation</button></div>
+            </article>
+
+            <article class="realization-card reveal" data-category="stage1">
+              <div class="card-top"><div class="card-icon">🧩</div><div><h4 class="card-title">Recherche de l’origine de dysfonctionnements</h4><p class="card-subtitle">Méthode de diagnostic et recherche de solution</p></div></div>
+              <p class="card-copy">Identification de la source d’un problème via une démarche logique : tests croisés, observation des messages d’erreur et vérification de plusieurs hypothèses.</p>
+              <div class="tags"><span class="pill gold">Répondre aux incidents</span></div>
+              <div class="link-row"><button class="mini-link primary-lite open-detail" data-detail="stage1-analyse">👁 Voir réalisation</button></div>
+            </article>
+
+            <article class="realization-card reveal delay-1" data-category="stage1">
+              <div class="card-top"><div class="card-icon">🔧</div><div><h4 class="card-title">Maintenance et dépannage sur équipements</h4><p class="card-subtitle">Interventions sur différents postes et matériels</p></div></div>
+              <p class="card-copy">Participation à des opérations de maintenance et de dépannage sur différents équipements informatiques, avec contrôle final avant restitution.</p>
+              <div class="tags"><span class="pill gold">Répondre aux incidents</span><span class="pill cyan">Gérer le patrimoine informatique</span></div>
+              <div class="link-row"><button class="mini-link primary-lite open-detail" data-detail="stage1-maintenance">👁 Voir réalisation</button></div>
+            </article>
+
+            <article class="realization-card reveal delay-2" data-category="stage1">
+              <div class="card-top"><div class="card-icon">🌐</div><div><h4 class="card-title">Vérification de connexions réseau sur postes</h4><p class="card-subtitle">Tests de connectivité de base</p></div></div>
+              <p class="card-copy">Participation à la vérification de la connectivité réseau, des paramètres IP et du bon accès aux ressources de base sur certains postes.</p>
+              <div class="tags"><span class="pill cyan">Gérer le patrimoine informatique</span><span class="pill green">Mettre à disposition un service</span></div>
+              <div class="link-row"><button class="mini-link primary-lite open-detail" data-detail="stage1-reseau">👁 Voir réalisation</button></div>
+            </article>
+          </div>
+        </div>
+
+        <div style="height:26px"></div>
+
+        <div class="panel reveal delay-1">
+          <div class="card-top" style="margin-bottom: 28px; align-items:center;">
+            <div class="card-icon">📸</div>
+            <div>
+              <h3 class="card-title" style="font-size:1.55rem;">Stage 2 — Projet Photomaton</h3>
+              <p class="card-subtitle">Flask, SQLite, gestion utilisateurs, rôles, prompts, images et débogage</p>
+            </div>
+          </div>
+
+          <article class="realization-card reveal">
+  <div class="card-top">
+    <div class="card-icon">📁</div>
+    <div>
+      <h4 class="card-title">Arborescence du projet</h4>
+      <p class="card-subtitle">Organisation des fichiers et structure du projet</p>
+    </div>
+  </div>
+
+  <p class="card-copy">
+    Présentation de la structure complète du projet Photomaton avec les dossiers principaux,
+    les routes Flask, les templates HTML et le stockage des images générées.
+  </p>
+
+  <div class="tags">
+    <span class="pill cyan">Organisation</span>
+    <span class="pill purple">Projet</span>
+  </div>
+
+  <div class="link-row">
+    <button class="mini-link cyan-lite open-detail" data-detail="stage2-arbo">
+      👁 Voir l’arborescence
+    </button>
+  </div>
+</article>
+
+          <div class="realization-grid">
+            <article class="realization-card reveal" data-category="stage2">
+              <div class="card-top"><div class="card-icon">🗃️</div><div><h4 class="card-title">Conception et modification de la base SQLite</h4><p class="card-subtitle">Utilisateurs, rôles, prompts, sessions et images</p></div></div>
+              <p class="card-copy">Conception et évolution de la base de données SQLite pour stocker les utilisateurs, les rôles, les prompts, les sessions et les images générées.</p>
+              <div class="tags"><span class="pill cyan">Gérer le patrimoine informatique</span><span class="pill green">Mettre à disposition un service</span></div>
+              <div class="link-row"><button class="mini-link cyan-lite open-detail" data-detail="stage2-bdd">👁 Voir réalisation</button></div>
+            </article>
+
+            <article class="realization-card reveal delay-1" data-category="stage2">
+              <div class="card-top"><div class="card-icon">👤</div><div><h4 class="card-title">Gestion des utilisateurs et des droits</h4><p class="card-subtitle">Comptes, rôles et accès conditionnels</p></div></div>
+              <p class="card-copy">Développement du système de gestion des utilisateurs et des droits d’accès admin / utilisateur dans l’application photomaton.</p>
+              <div class="tags"><span class="pill green">Mettre à disposition un service</span><span class="pill purple">Travailler en mode projet</span></div>
+              <div class="link-row"><button class="mini-link cyan-lite open-detail" data-detail="stage2-utilisateurs">👁 Voir réalisation</button></div>
+            </article>
+
+            <article class="realization-card reveal delay-2" data-category="stage2">
+              <div class="card-top"><div class="card-icon">✍️</div><div><h4 class="card-title">Gestion des prompts</h4><p class="card-subtitle">Création, modification et utilisation métier</p></div></div>
+              <p class="card-copy">Développement du système permettant de créer, modifier et exploiter les prompts dans le photomaton selon les besoins de l’application.</p>
+              <div class="tags"><span class="pill green">Mettre à disposition un service</span><span class="pill purple">Travailler en mode projet</span></div>
+              <div class="link-row"><button class="mini-link cyan-lite open-detail" data-detail="stage2-prompts">👁 Voir réalisation</button></div>
+            </article>
+
+            <article class="realization-card reveal" data-category="stage2">
+              <div class="card-top"><div class="card-icon">👁️</div><div><h4 class="card-title">Affichage conditionnel selon les rôles</h4><p class="card-subtitle">Fonctions visibles uniquement pour certains profils</p></div></div>
+              <p class="card-copy">Mise en place de contrôles dans l’interface afin d’afficher ou masquer certaines fonctionnalités selon le rôle connecté.</p>
+              <div class="tags"><span class="pill green">Mettre à disposition un service</span><span class="pill cyan">Développer la présence en ligne</span></div>
+              <div class="link-row"><button class="mini-link cyan-lite open-detail" data-detail="stage2-roles">👁 Voir réalisation</button></div>
+            </article>
+
+            <article class="realization-card reveal delay-1" data-category="stage2">
+              <div class="card-top"><div class="card-icon">🖼️</div><div><h4 class="card-title">Association image ↔ prompt et enregistrement</h4><p class="card-subtitle">Lien métier entre contenu généré et consigne</p></div></div>
+              <p class="card-copy">Mise en place d’un système permettant d’associer chaque image générée au prompt correspondant, avec enregistrement persistant.</p>
+              <div class="tags"><span class="pill cyan">Gérer le patrimoine informatique</span></div>
+              <div class="link-row"><button class="mini-link cyan-lite open-detail" data-detail="stage2-images">👁 Voir réalisation</button></div>
+            </article>
+
+            <article class="realization-card reveal delay-2" data-category="stage2">
+              <div class="card-top"><div class="card-icon">💾</div><div><h4 class="card-title">Sauvegarde des images générées et des prompts associés</h4><p class="card-subtitle">Fichiers + base de données</p></div></div>
+              <p class="card-copy">Mise en place du système de sauvegarde des images générées et des prompts associés à la fois dans le système de fichiers et dans la base.</p>
+              <div class="tags"><span class="pill cyan">Gérer le patrimoine informatique</span><span class="pill green">Mettre à disposition un service</span></div>
+              <div class="link-row"><button class="mini-link cyan-lite open-detail" data-detail="stage2-sauvegarde">👁 Voir réalisation</button></div>
+            </article>
+
+            <article class="realization-card reveal" data-category="stage2">
+              <div class="card-top"><div class="card-icon">🐞</div><div><h4 class="card-title">Correction de dysfonctionnements et amélioration des modules</h4><p class="card-subtitle">Logs, correction, validation</p></div></div>
+              <p class="card-copy">Correction de dysfonctionnements rencontrés lors du développement des modules utilisateurs et prompts, avec exploitation des logs pour faciliter le débogage.</p>
+              <div class="tags"><span class="pill gold">Répondre aux incidents</span></div>
+              <div class="link-row"><button class="mini-link cyan-lite open-detail" data-detail="stage2-debug">👁 Voir réalisation</button></div>
+            </article>
+
+            <article class="realization-card reveal delay-1" data-category="stage2">
+              <div class="card-top"><div class="card-icon">🧪</div><div><h4 class="card-title">Tests manuels et validation des formulaires</h4><p class="card-subtitle">Vérification des parcours utilisateur</p></div></div>
+              <p class="card-copy">Validation du bon fonctionnement des formulaires, des contraintes de saisie et des parcours utilisateurs selon différents scénarios d’usage.</p>
+              <div class="tags"><span class="pill purple">Qualité</span><span class="pill green">Service</span></div>
+              <div class="link-row"><button class="mini-link cyan-lite open-detail" data-detail="stage2-tests">👁 Voir réalisation</button></div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="formation">
+      <div class="container">
+        <div class="formation-top reveal">
+          <div class="section-header" style="margin-bottom:0; max-width:760px;">
+            <div class="eyebrow">En cours de formation</div>
+            <h2>Projets réalisés pendant le BTS</h2>
+            <p>
+              Cette section regroupe les principales réalisations menées en formation. Le moteur de recherche permet de filtrer rapidement, et les boutons détaillés ouvrent une fiche projet plus complète.
+            </p>
+          </div>
+          <label class="search-bar" aria-label="Rechercher un projet de formation">
+            <span>🔎</span>
+            <input id="projectSearch" type="text" placeholder="GSB, M2L, GLPI, SQL, Java, LAMP..." />
+          </label>
+        </div>
+
+        <div class="filter-row reveal delay-1">
+          <button class="chip active project-filter" data-filter="all">Tous</button>
+          <button class="chip project-filter" data-filter="web">Web</button>
+          <button class="chip project-filter" data-filter="bdd">BDD</button>
+          <button class="chip project-filter" data-filter="infra">Infrastructure</button>
+          <button class="chip project-filter" data-filter="java">Java</button>
+        </div>
+
+        <div class="grid-3" id="projectGrid">
+          <article class="project-card reveal" data-filter-group="web bdd" data-search="gsb application web gestion frais php sql html visiteurs fiches frais remboursements">
+            <div class="card-top"><div class="card-icon">🧾</div><div><h3 class="card-title">Application web de gestion des frais (GSB)</h3><p class="card-subtitle">PHP / SQL / HTML</p></div></div>
+            <p class="card-copy">Analyse du cahier des charges et mise en place d’une base SQL pour gérer les visiteurs, les fiches de frais et les remboursements.</p>
+            <div class="tags"><span class="pill cyan">Développement web</span><span class="pill purple">Base de données</span></div>
+            <div class="link-row"><button class="mini-link purple-lite open-detail" data-detail="formation-gsb">👁 Voir projet</button></div>
+          </article>
+
+          <article class="project-card reveal delay-1" data-filter-group="web" data-search="transports application web php sql visiteurs fiches frais remboursements interface">
+            <div class="card-top"><div class="card-icon">🚚</div><div><h3 class="card-title">Application web de gestion des transports</h3><p class="card-subtitle">PHP / SQL / HTML</p></div></div>
+            <p class="card-copy">Développement d’une application web permettant de gérer des données métier, des formulaires et le suivi des enregistrements.</p>
+            <div class="tags"><span class="pill cyan">Application métier</span><span class="pill purple">SQL</span></div>
+            <div class="link-row"><button class="mini-link purple-lite open-detail" data-detail="formation-transports">👁 Voir projet</button></div>
+          </article>
+
+          <article class="project-card reveal delay-2" data-filter-group="web bdd" data-search="m2l club sportif gestion adherents php mariadb html création modification suppression consultation">
+            <div class="card-top"><div class="card-icon">🏟️</div><div><h3 class="card-title">Application de gestion pour un club sportif (M2L)</h3><p class="card-subtitle">PHP / MariaDB / HTML</p></div></div>
+            <p class="card-copy">Application de gestion des adhérents avec création, modification, suppression et consultation dans une interface claire.</p>
+            <div class="tags"><span class="pill cyan">Gestion</span><span class="pill purple">CRUD</span></div>
+            <div class="link-row"><button class="mini-link purple-lite open-detail" data-detail="formation-m2l">👁 Voir projet</button></div>
+          </article>
+
+          <article class="project-card reveal" data-filter-group="bdd" data-search="centralisation import données sql php consultation modification enregistrements">
+            <div class="card-top"><div class="card-icon">🗂️</div><div><h3 class="card-title">Centralisation et import de données SQL</h3><p class="card-subtitle">SQL / PHP</p></div></div>
+            <p class="card-copy">Import de données dans une base SQL et consultation / modification des enregistrements depuis une interface web.</p>
+            <div class="tags"><span class="pill purple">Données</span><span class="pill cyan">Traitement</span></div>
+            <div class="link-row"><button class="mini-link purple-lite open-detail" data-detail="formation-import-sql">👁 Voir projet</button></div>
+          </article>
+
+          <article class="project-card reveal delay-1" data-filter-group="infra" data-search="lamp apache php mariadb machine virtuelle serveur web déploiement">
+            <div class="card-top"><div class="card-icon">🖥️</div><div><h3 class="card-title">Mise en place d’un serveur web LAMP</h3><p class="card-subtitle">Apache / PHP / MariaDB / VM</p></div></div>
+            <p class="card-copy">Création d’une machine virtuelle, installation d’un serveur web Apache, de PHP et de MariaDB dans un environnement LAMP.</p>
+            <div class="tags"><span class="pill gold">Infrastructure</span><span class="pill cyan">Service</span></div>
+            <div class="link-row"><button class="mini-link purple-lite open-detail" data-detail="formation-lamp">👁 Voir projet</button></div>
+          </article>
+
+          <article class="project-card reveal delay-2" data-filter-group="infra" data-search="glpi apache mariadb incidents parc informatique déploiement configuration">
+            <div class="card-top"><div class="card-icon">📦</div><div><h3 class="card-title">Déploiement de GLPI</h3><p class="card-subtitle">GLPI / Apache / MariaDB</p></div></div>
+            <p class="card-copy">Configuration d’une base de données et déploiement de GLPI pour la gestion des incidents et du parc informatique.</p>
+            <div class="tags"><span class="pill gold">Gestion de parc</span><span class="pill cyan">Support</span></div>
+            <div class="link-row"><button class="mini-link purple-lite open-detail" data-detail="formation-glpi">👁 Voir projet</button></div>
+          </article>
+
+          <article class="project-card reveal" data-filter-group="java" data-search="java application lourde gestion adherents swing poo classes objets bts sio">
+            <div class="card-top"><div class="card-icon">☕</div><div><h3 class="card-title">Application Java de gestion d’adhérents</h3><p class="card-subtitle">Java / POO</p></div></div>
+            <p class="card-copy">Projet orienté programmation orientée objet avec gestion d’adhérents, classes métier, formulaires et logique applicative.</p>
+            <div class="tags"><span class="pill red">Application lourde</span><span class="pill purple">POO</span></div>
+            <div class="link-row"><button class="mini-link purple-lite open-detail" data-detail="formation-java">👁 Voir projet</button></div>
+          </article>
+
+          <article class="project-card reveal delay-1" data-filter-group="bdd" data-search="sql requêtes jointures vues triggers procédures exercices base données">
+            <div class="card-top"><div class="card-icon">🧠</div><div><h3 class="card-title">Travaux SQL avancés</h3><p class="card-subtitle">Jointures / vues / triggers / logique de données</p></div></div>
+            <p class="card-copy">Réalisation de requêtes plus avancées et structuration de jeux de données dans un cadre pédagogique lié au BTS.</p>
+            <div class="tags"><span class="pill purple">SQL</span><span class="pill cyan">Analyse</span></div>
+            <div class="link-row"><button class="mini-link purple-lite open-detail" data-detail="formation-sql-avance">👁 Voir projet</button></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="competences">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="eyebrow">Compétences</div>
+          <h2>Langages, outils et notions mobilisés</h2>
+          <p>
+            Une synthèse claire des technologies, des outils et des notions mobilisées pendant mes stages et mes projets. Chaque bloc peut ouvrir une fiche plus détaillée pour présenter ce que j’ai fait concrètement.
+          </p>
+        </div>
+
+        <div class="skill-wrap">
+          <article class="skill-card reveal">
+            <h3 style="display:flex; align-items:center; gap:12px; margin-bottom:18px;"><span class="icon-box">💡</span> Langages / frameworks</h3>
+            <div class="list-inline">
+              <span class="pill">Python</span><span class="pill">Flask</span><span class="pill">HTML</span><span class="pill">CSS</span><span class="pill">SQL</span><span class="pill">PHP</span><span class="pill">Java</span><span class="pill">JavaScript</span>
+            </div>
+            <div class="link-row" style="margin-top:18px;"><button class="mini-link open-detail" data-detail="competences-langages">👁 Voir détail</button></div>
+          </article>
+
+          <article class="skill-card reveal delay-1">
+            <h3 style="display:flex; align-items:center; gap:12px; margin-bottom:18px;"><span class="icon-box">🧰</span> Outils / environnements</h3>
+            <div class="list-inline">
+              <span class="pill">SQLite</span><span class="pill">MariaDB</span><span class="pill">Apache</span><span class="pill">GLPI</span><span class="pill">Git</span><span class="pill">VS Code</span><span class="pill">PuTTY</span><span class="pill">Tailscale</span>
+            </div>
+            <div class="link-row" style="margin-top:18px;"><button class="mini-link open-detail" data-detail="competences-outils">👁 Voir détail</button></div>
+          </article>
+
+          <article class="skill-card reveal delay-2">
+            <h3 style="display:flex; align-items:center; gap:12px; margin-bottom:18px;"><span class="icon-box">📘</span> Notions à savoir expliquer</h3>
+            <div class="list-inline">
+              <span class="pill">Base de données</span><span class="pill">Gestion des rôles</span><span class="pill">Débogage</span><span class="pill">Architecture web</span><span class="pill">Validation métier</span><span class="pill">Portfolio BTS</span>
+            </div>
+            <div class="link-row" style="margin-top:18px;"><button class="mini-link open-detail" data-detail="competences-notions">👁 Voir détail</button></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="veille">
+      <div class="container veille-grid">
+        <div class="panel reveal">
+          <div class="section-header" style="margin-bottom:0;">
+            <div class="eyebrow">Veille technologique</div>
+            <h2>Une veille axée cybersécurité</h2>
+            <p>
+              Ma veille technologique est orientée cybersécurité et vulnérabilités informatiques. Elle me permet de suivre l’actualité du domaine, de repérer des menaces, de mieux comprendre l’environnement professionnel et d’enrichir mes futures présentations.
+            </p>
+          </div>
+          <div class="link-row" style="margin-top:20px;"><button class="mini-link primary-lite open-detail" data-detail="veille-cyber">👁 Voir la veille</button></div>
+        </div>
+
+        <div class="panel reveal delay-1">
+          <div class="bullet-list">
+            <div class="bullet-item"><span class="dot"></span><div>Sujet principal : cybersécurité, vulnérabilités et attaques récentes.</div></div>
+            <div class="bullet-item"><span class="dot"></span><div>Outil principal : Feedly pour centraliser et suivre les sources.</div></div>
+            <div class="bullet-item"><span class="dot"></span><div>Objectif : identifier les informations importantes et les tendances du domaine.</div></div>
+            <div class="bullet-item"><span class="dot"></span><div>Exploitation : réutilisation dans le portfolio, l’oral et les fiches de synthèse.</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="preuves">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="eyebrow">Preuves / détails techniques</div>
+          <h2>Une zone dédiée pour relier les réalisations au code, aux captures et aux comptes rendus</h2>
+          <p>
+            Cette zone te permet de garder une page principale propre, tout en montrant des preuves réelles. Tu peux y mettre tes captures d’écran, tes extraits de code, tes schémas, tes procédures, tes PDF et tes commentaires personnels.
+          </p>
+        </div>
+
+        <div class="proof-grid proof-section">
+          <article class="proof-card reveal">
+            <div class="proof-top" style="margin-bottom:16px;">
+              <div>
+                <h3>Preuves liées au projet Photomaton</h3>
+                <p class="card-copy" style="margin-top:8px;">Exemples de captures, code, schémas et traces exploitables à l’oral.</p>
+              </div>
+              <button class="mini-link open-detail" data-detail="preuve-photomaton">👁 Voir détail</button>
+            </div>
+            <div class="bullet-list">
+              <div class="bullet-item"><span class="dot"></span><div>Captures de la page utilisateurs, page prompts et formulaires.</div></div>
+              <div class="bullet-item"><span class="dot"></span><div>Schéma de la base SQLite et structure des tables.</div></div>
+              <div class="bullet-item"><span class="dot"></span><div>Extraits de code Flask, routes, vérifications et sauvegarde.</div></div>
+              <div class="bullet-item"><span class="dot"></span><div>Logs utilisés pour le débogage et la correction des bugs.</div></div>
+            </div>
+          </article>
+
+          <article class="proof-card reveal delay-1">
+            <div class="proof-top" style="margin-bottom:16px;">
+              <div>
+                <h3>Preuves liées au stage Booster Informatique</h3>
+                <p class="card-copy" style="margin-top:8px;">Support, maintenance et environnement professionnel.</p>
+              </div>
+              <button class="mini-link open-detail" data-detail="preuve-booster">👁 Voir détail</button>
+            </div>
+            <div class="bullet-list">
+              <div class="bullet-item"><span class="dot"></span><div>Fiches d’activité, rapport ou traces de stage.</div></div>
+              <div class="bullet-item"><span class="dot"></span><div>Captures ou photos de l’environnement technique.</div></div>
+              <div class="bullet-item"><span class="dot"></span><div>Tableau de réalisations ou synthèse E4.</div></div>
+              <div class="bullet-item"><span class="dot"></span><div>Notes de diagnostic, maintenance, logiciels et réseau.</div></div>
+            </div>
+          </article>
+
+          <article class="proof-card reveal delay-2">
+            <div class="proof-top" style="margin-bottom:16px;">
+              <div>
+                <h3>Preuves liées aux projets de formation</h3>
+                <p class="card-copy" style="margin-top:8px;">Captures, diagrammes, extraits SQL/PHP/Java et docs.</p>
+              </div>
+              <button class="mini-link open-detail" data-detail="preuve-formation">👁 Voir détail</button>
+            </div>
+            <div class="bullet-list">
+              <div class="bullet-item"><span class="dot"></span><div>Captures d’écran des applications réalisées.</div></div>
+              <div class="bullet-item"><span class="dot"></span><div>Extraits de code SQL, PHP ou Java.</div></div>
+              <div class="bullet-item"><span class="dot"></span><div>Schémas de données, MCD ou diagrammes simples.</div></div>
+              <div class="bullet-item"><span class="dot"></span><div>Documents techniques et comptes rendus.</div></div>
+            </div>
+          </article>
+        </div>
+
+        <div class="callout reveal">
+          <p>
+            Conseil : remplace progressivement les zones de démonstration par tes vraies captures, ton vrai code et tes vraies explications. La structure est déjà prête pour que tu aies le moins de boulot possible.
+          </p>
+          <span class="pill green">Portfolio lisible + preuves séparées</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container contact-grid">
+        <div class="panel reveal">
+          <div class="section-header" style="margin-bottom:0;">
+            <div class="eyebrow">Contact / suite</div>
+            <h2>Une base solide à personnaliser avec tes vraies preuves</h2>
+            <p>
+              Le plus dur est déjà fait : les sections, la hiérarchie visuelle, les boutons détaillés et les zones de preuve sont en place. Tu peux maintenant remplacer les contenus d’exemple par tes informations réelles sans casser la structure du site.
+            </p>
+          </div>
+        </div>
+
+        <div class="panel reveal delay-1">
+          <div class="contact-card-grid">
+            <div class="contact-box">
+              <strong>📧 Email</strong>
+              <p>nasribafa@gmail.com</p>
+            </div>
+            <div class="contact-box">
+              <strong>💻 GitHub</strong>
+              <p>ajoute-ton-profil-github</p>
+            </div>
+            <div class="contact-box" style="grid-column:1 / -1;">
+              <strong>📝 Utilisation conseillée</strong>
+              <p>
+                Montre cette page comme support principal au professeur, puis ouvre les fiches détaillées pour prouver ce que tu expliques. C’est beaucoup plus propre qu’un portfolio plat ou qu’un PDF trop chargé.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-wrap">
+      <span>Portfolio BTS SIO SLAM — Ahmed Nasri</span>
+      <span>Version HTML / CSS / JS — fichier unique ultra pro</span>
+    </div>
+  </footer>
+
+  <div class="detail-view" id="detailView" aria-hidden="true">
+    <div class="modal-shell">
+      <div class="modal-top">
+        <div>
+          <h3 id="detailTitle">Détail</h3>
+          <p id="detailSubtitle">Contenu détaillé</p>
+        </div>
+        <button class="close-btn" id="closeDetail" aria-label="Fermer">✕</button>
+      </div>
+      <div class="modal-body" id="detailBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const header = document.getElementById('siteHeader');
+    const menuToggle = document.getElementById('menuToggle');
+    const mobilePanel = document.getElementById('mobilePanel');
+    const mobileLinks = mobilePanel.querySelectorAll('a');
+    const navLinks = document.querySelectorAll('nav.main-nav a');
+    const sections = [...document.querySelectorAll('main section')];
+    const reveals = document.querySelectorAll('.reveal');
+    const projectSearch = document.getElementById('projectSearch');
+    const projectCards = [...document.querySelectorAll('#projectGrid .project-card')];
+    const projectFilters = [...document.querySelectorAll('.project-filter')];
+    const detailView = document.getElementById('detailView');
+    const detailTitle = document.getElementById('detailTitle');
+    const detailSubtitle = document.getElementById('detailSubtitle');
+    const detailBody = document.getElementById('detailBody');
+    const closeDetail = document.getElementById('closeDetail');
+
+    const updateHeader = () => {
+      if (window.scrollY > 12) header.classList.add('scrolled');
+      else header.classList.remove('scrolled');
+    };
+    updateHeader();
+    window.addEventListener('scroll', updateHeader);
+
+    menuToggle.addEventListener('click', () => {
+      const open = mobilePanel.classList.toggle('open');
+      menuToggle.classList.toggle('is-open', open);
+      menuToggle.setAttribute('aria-expanded', String(open));
+      document.body.classList.toggle('locked', open);
+    });
+
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobilePanel.classList.remove('open');
+        menuToggle.classList.remove('is-open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('locked');
+      });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+
+    const setActiveLink = () => {
+      const offset = window.scrollY + 140;
+      let currentId = sections[0]?.id || 'accueil';
+      for (const section of sections) {
+        if (offset >= section.offsetTop) currentId = section.id;
+      }
+      navLinks.forEach(link => {
+        const isActive = link.getAttribute('href') === '#' + currentId;
+        link.classList.toggle('active', isActive);
+      });
+    };
+    setActiveLink();
+    window.addEventListener('scroll', setActiveLink);
+
+    let currentProjectFilter = 'all';
+
+    const updateProjectDisplay = () => {
+      const q = (projectSearch?.value || '').trim().toLowerCase();
+      projectCards.forEach(card => {
+        const haystack = (card.dataset.search || '').toLowerCase();
+        const group = (card.dataset.filterGroup || '').toLowerCase();
+        const matchSearch = haystack.includes(q);
+        const matchFilter = currentProjectFilter === 'all' || group.includes(currentProjectFilter);
+        card.style.display = (matchSearch && matchFilter) ? '' : 'none';
+      });
+    };
+
+    if (projectSearch) {
+      projectSearch.addEventListener('input', updateProjectDisplay);
+    }
+
+    projectFilters.forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentProjectFilter = btn.dataset.filter || 'all';
+        projectFilters.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        updateProjectDisplay();
+      });
+    });
+
+    const codeBox = (title, lang, code) => `
+      <div class="code-card">
+        <div class="code-header">
+          <div class="window-dots"><span></span><span></span><span></span></div>
+          <div class="code-title">${title}</div>
+          <span class="chip">${lang}</span>
+        </div>
+        <pre>${code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+      </div>
+    `;
+
+    const placeholder = (label) => `
+      <div class="placeholder-img">${label}<br><br>Remplace cette zone par ta vraie capture d’écran</div>
+    `;
+
+    const bullet = (items) => `
+      <div class="bullet-list">${items.map(item => `<div class="bullet-item"><span class="dot"></span><div>${item}</div></div>`).join('')}</div>
+    `;
+
+    const resourceList = (rows) => `
+      <div class="resource-list">${rows.map(([left, right]) => `<div class="row"><strong>${left}</strong><span>${right}</span></div>`).join('')}</div>
+    `;
+
+    const detailTemplates = {
+      'stage1-diagnostic': {
+        title: 'Stage 1 — Diagnostic de pannes sur des postes informatiques',
+        subtitle: 'Fiche détaillée de réalisation — support / maintenance',
+        body: `
+          <section class="modal-section detail-grid">
+            <article class="detail-card">
+              <h4>Contexte</h4>
+              <p class="card-copy">Pendant mon stage chez Booster Informatique, j’ai participé au diagnostic de plusieurs postes présentant des dysfonctionnements. L’objectif était de comprendre l’origine du problème avant toute intervention.</p>
+              ${bullet([
+                'Observation du symptôme constaté sur le poste.',
+                'Vérification rapide de l’état général de la machine.',
+                'Tests pour différencier un problème logiciel d’un problème matériel.',
+                'Validation du comportement après identification de la cause.'
+              ])}
+            </article>
+            <article class="gallery-card">
+              <h4>Capture / photo / preuve</h4>
+                <img src="Vérification_de_connexions_réseau_sur_postes.png" class="portfolio-img">
+
+              
+            </article>
+          </section>
+          <section class="modal-section detail-grid">
+            <article class="detail-card">
+              <h4>Démarche suivie</h4>
+              ${bullet([
+                'Identifier le symptôme principal : lenteur, démarrage, affichage, périphérique non reconnu…',
+                'Tester les éléments les plus évidents en premier pour éviter de perdre du temps.',
+                'Comparer avec un comportement normal ou un autre poste si nécessaire.',
+                'Isoler progressivement l’origine du dysfonctionnement.'
+              ])}
+            </article>
+            <article class="detail-card">
+              <h4>Compétences BTS mobilisées</h4>
+              ${bullet([
+                'Répondre aux incidents et aux demandes d’assistance.',
+                'Gérer le patrimoine informatique.',
+                'Adopter une démarche rigoureuse de vérification et de test.'
+              ])}
+            </article>
+          </section>
+          <section class="modal-section">
+            ${codeBox('diagnostic_procedure.txt', 'Procédure', `1. Identifier le symptôme\n2. Vérifier l’alimentation / démarrage\n3. Contrôler le système et les périphériques\n4. Tester si le problème est logiciel ou matériel\n5. Noter la cause probable\n6. Valider après intervention`)}
+          </section>
+        `
+      },
+     'stage1-installation': {
+    title: 'Stage 1 — Installation et configuration de logiciels',
+    subtitle: 'Déploiement automatisé via script PowerShell et Winget',
+    body: `
+      <section class="modal-section detail-grid">
+        <article class="detail-card">
+          <h4>Objectif & Automatisation</h4>
+          <p class="card-copy">Industrialiser l'installation du socle applicatif standard sur les postes de travail afin de garantir une configuration homogène et rapide.</p>
+          ${bullet([
+            'Utilisation du gestionnaire de paquets Windows (Winget).',
+            'Création d’un script PowerShell (.ps1) pour l’installation en série.',
+            'Paramétrage des installations silencieuses (mode --silent).',
+            'Acceptation automatique des contrats de licence (EULA).'
+          ])}
+        </article>
+        <article class="gallery-card">
+          <h4>Script de déploiement</h4>
+          <img src="preuves_logicielle.png" class="portfolio-img" alt="Capture du script PowerShell">
+        </article>
+      </section>
+      
+      <section class="modal-section">
+        ${codeBox('Install_Standard.ps1', 'Script PowerShell', `# Installation des outils standards\nwinget install --id 7zip.7zip --silent --accept-package-agreements\nwinget install --id Adobe.Acrobat.Reader.64-bit --silent\nwinget install --id Google.Chrome --silent`)}
+      </section>
+
+      <section class="modal-section detail-grid">
+        <article class="detail-card">
+          <h4>Vérification post-installation</h4>
+          ${bullet([
+            'Contrôle de la présence des raccourcis sur le bureau.',
+            'Vérification des versions installées via la console.',
+            'Analyse des codes de sortie (Exit Codes) du script pour identifier d’éventuels échecs.'
+          ])}
+        </article>
+      </section>
+    `
+
+      },
+      'stage1-tests': {
+        title: 'Stage 1 — Vérification du fonctionnement après intervention',
+        subtitle: 'Validation du poste après dépannage ou configuration',
+        body: `
+          <section class="modal-section detail-grid">
+            <article class="detail-card">
+              <h4>Pourquoi cette étape est importante</h4>
+              <p class="card-copy">Une intervention n’est pas terminée tant que le bon fonctionnement n’est pas vérifié. Cette étape permet d’éviter qu’un problème apparent soit corrigé mais qu’un autre dysfonctionnement subsiste.</p>
+              ${bullet([
+                'Redémarrage et observation du lancement du système.',
+                'Contrôle du clavier, de la souris, de l’écran et d’autres périphériques.',
+                'Vérification de la connexion réseau quand c’était nécessaire.',
+                'Validation finale avant restitution.'
+              ])}
+            </article>
+            <article class="gallery-card">
+              <h4>Preuve possible</h4>
+              ${placeholder('Photo du poste testé ou fiche de validation')}
+            </article>
+          </section>
+        `
+      },
+      'stage1-analyse': {
+    title: 'Stage 1 — Recherche de l’origine de dysfonctionnements',
+    subtitle: 'Méthode logique d’analyse avant correction',
+    body: `
+      <section class="modal-section detail-grid">
+        <article class="detail-card">
+          <h4>Analyse du problème</h4>
+          <p class="card-copy">Cette activité m’a appris à ne pas intervenir au hasard. Il faut d’abord analyser, vérifier, comparer et isoler les causes possibles pour gagner du temps et éviter les erreurs.</p>
+          ${bullet([
+            'Recueillir les symptômes observés.',
+            'Écarter progressivement les hypothèses.',
+            'Faire des tests simples avant les plus lourds.',
+            'Conserver une logique dans la démarche de dépannage.'
+          ])}
+        </article>
+
+        <article class="gallery-card">
+          <h4>Capture / photo / preuve</h4>
+          <img src="1.png" class="portfolio-img" alt="Analyse du dysfonctionnement">
+        </article>
+      </section>
+
+      <section class="modal-section detail-grid">
+        <article class="detail-card">
+          <h4>Ce que cela montre au jury</h4>
+          ${bullet([
+            'Capacité à raisonner techniquement.',
+            'Méthode de support structurée.',
+            'Prise de recul avant action.'
+          ])}
+        </article>
+      </section>
+    `
+
+      },
+      'stage1-maintenance': {
+        title: 'Stage 1 — Maintenance et dépannage sur équipements',
+        subtitle: 'Interventions sur différents matériels',
+        body: `
+          <section class="modal-section detail-grid">
+            <article class="detail-card">
+              <h4>Description</h4>
+              <p class="card-copy">Participation à plusieurs interventions de maintenance et de dépannage. Cette activité m’a surtout permis de mieux comprendre le rôle du support et l’importance d’une vérification propre avant restitution.</p>
+              ${bullet([
+                'Repérage du matériel concerné.',
+                'Intervention ou assistance pendant la maintenance.',
+                'Contrôle du bon fonctionnement après action.',
+                'Retour à un état exploitable du poste.'
+              ])}
+            </article>
+            <article class="gallery-card">
+              <h4>Photo / matériel</h4>
+              ${placeholder('Photo d’un poste, d’un composant ou d’une intervention')}
+            </article>
+          </section>
+        `
+      },
+      'stage1-reseau': {
+        title: 'Stage 1 — Vérification de connexions réseau sur postes',
+        subtitle: 'Tests de connectivité de base',
+        body: `
+          <section class="modal-section detail-grid">
+            <article class="detail-card">
+              <h4>Activité réalisée</h4>
+              <p class="card-copy">Contrôle de paramètres réseau simples sur certains postes afin de vérifier que la machine accède correctement au réseau et aux services nécessaires.</p>
+              ${bullet([
+                'Vérification de la connexion physique ou Wi‑Fi.',
+                'Test de connectivité basique.',
+                'Contrôle des paramètres réseau si besoin.',
+                'Validation de l’accès à Internet ou aux ressources attendues.'
+              ])}
+            </article>
+            <article class="detail-card">
+              <h4>Compétences visibles</h4>
+              ${bullet([
+                'Support utilisateur.',
+                'Vérification technique simple mais utile.',
+                'Rigueur dans la validation.'
+              ])}
+            </article>
+          </section>
+        `
+      },
+      'stage2-bdd': {
+        title: 'Stage 2 — Conception et modification de la base SQLite',
+        subtitle: 'Photomaton — structure des données et logique de persistance',
+        body: `
+          <section class="modal-section detail-grid">
+            <article class="detail-card">
+              <h4>Rôle de la base de données</h4>
+              <p class="card-copy">La base SQLite est le cœur du projet Photomaton. Elle permet de stocker les utilisateurs, les rôles, les prompts, les sessions et les images générées, tout en assurant un lien cohérent entre les données.</p>
+              ${bullet([
+                'Création ou adaptation des tables principales.',
+                'Ajout de champs utiles selon l’évolution du projet.',
+                'Organisation logique pour relier les entités entre elles.',
+                'Préparation des données nécessaires à l’interface web.'
+              ])}
+            </article>
+            <article class="gallery-card">
+              <div class ="image-grid">
+              <h4>Schéma / capture</h4>
+            <img src="schemabdd.png" class="portfolio-img">
+            <img src="table_prompt.png" class="portfolio-img">
+            <img src="tablea_user.png" class="portfolio-img">
+            <img src="mdp_hash.png" class="portfolio-img">
+            </div>
+
+
+             
+            </article>
+          </section>
+          <section class="modal-section">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Table</th><th>Rôle</th><th>Exemples de champs</th></tr></thead>
+                <tbody>
+                  <tr><td>users</td><td>Comptes utilisateurs</td><td>id, username, password_hash, role_id</td></tr>
+                  <tr><td>roles</td><td>Types de profils</td><td>id, name</td></tr>
+                  <tr><td>prompts</td><td>Consignes textuelles</td><td>id, title, content, created_by</td></tr>
+                  <tr><td>images</td><td>Fichiers générés</td><td>id, image_path, prompt_id, created_at</td></tr>
+                  <tr><td>sessions</td><td>Traçabilité ou logique de session</td><td>id, user_id, started_at</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+          <section class="modal-section">
+            ${codeBox('schema.sql', 'SQL', `CREATE TABLE roles (\n  id INTEGER PRIMARY KEY AUTOINCREMENT,\n  name TEXT NOT NULL UNIQUE\n);\n\nCREATE TABLE users (\n  id INTEGER PRIMARY KEY AUTOINCREMENT,\n  username TEXT NOT NULL UNIQUE,\n  password_hash TEXT NOT NULL,\n  role_id INTEGER NOT NULL,\n  FOREIGN KEY (role_id) REFERENCES roles(id)\n);\n\nCREATE TABLE prompts (\n  id INTEGER PRIMARY KEY AUTOINCREMENT,\n  title TEXT NOT NULL,\n  content TEXT NOT NULL,\n  created_by INTEGER,\n  FOREIGN KEY (created_by) REFERENCES users(id)\n);\n\nCREATE TABLE images (\n  id INTEGER PRIMARY KEY AUTOINCREMENT,\n  image_path TEXT NOT NULL,\n  prompt_id INTEGER,\n  created_at TEXT DEFAULT CURRENT_TIMESTAMP,\n  FOREIGN KEY (prompt_id) REFERENCES prompts(id)\n);`)}
+          </section>
+        `
+      },
+      'stage2-utilisateurs': {
+        title: 'Stage 2 — Gestion des utilisateurs et des droits',
+        subtitle: 'Photomaton — comptes, rôles et sécurisation de l’accès',
+        body: `
+          <section class="modal-section detail-grid">
+            <article class="detail-card">
+              <h4>But de la fonctionnalité</h4>
+              <p class="card-copy">L’application devait distinguer plusieurs profils, notamment l’administrateur et l’utilisateur classique. Cette gestion permet de sécuriser les actions sensibles et d’adapter l’interface selon la personne connectée.</p>
+              ${bullet([
+                'Création ou modification des comptes utilisateur.',
+                'Association d’un rôle à chaque compte.',
+                'Contrôle de l’accès à certaines pages.',
+                'Affichage ou masquage de boutons selon le rôle.'
+              ])}
+            </article>
+            <article class="gallery-card">
+              <h4>Capture de page</h4>
+              <div class ="image-grid">
+            <img src="connexion.png" class="portfolio-img">
+            <img src="gestionutilisateur.png" class="portfolio-img">
+            <img src="mdp_hash.png" class="portfolio-img">
+            <img src="schemabdd.png" class="portfolio-img">
+            <img src ="indexx.png" class="portfolio-img">
+            <img src ="index_lecture.png" class="portfolio-img">
+               <img src ="index_modif.png" class="portfolio-img">
+               </div>
+           
+          
+
+
+              
+            </article>
+          </section>
+          <section class="modal-section detail-grid">
+            <article class="detail-card">
+              <h4>Ce que ça montre</h4>
+              ${bullet([
+                'Compréhension de la logique métier des droits.',
+                'Capacité à relier interface, base et logique applicative.',
+                'Prise en compte d’un besoin réel de gestion d’accès.'
+              ])}
+            </article>
+            <article class="detail-card">
+              <h4>Liens BTS</h4>
+              ${bullet([
+                'Mettre à disposition un service informatique.',
+                'Travailler en mode projet.',
+                'Sécuriser l’accès à un service de base.'
+              ])}
+            </article>
+          </section>
+          <section class="modal-section">
+            ${codeBox('routes/users.py', 'Python / Flask', `@app.route('/users')\n@login_required\ndef users():\n    if session.get('role') != 'admin':\n        flash('Accès refusé', 'error')\n        return redirect(url_for('dashboard'))\n\n    rows = get_db().execute('SELECT u.id, u.username, r.name AS role FROM users u JOIN roles r ON r.id = u.role_id').fetchall()\n    return render_template('users.html', users=rows)\n\n@app.route('/users/create', methods=['GET', 'POST'])\n@login_required\ndef create_user():\n    if session.get('role') != 'admin':\n        return redirect(url_for('dashboard'))\n\n    if request.method == 'POST':\n        username = request.form.get('username', '').strip()\n        password = request.form.get('password', '').strip()\n        role_id = request.form.get('role_id')\n\n        if username and password and role_id:\n            password_hash = generate_password_hash(password)\n            db = get_db()\n            db.execute('INSERT INTO users(username, password_hash, role_id) VALUES (?, ?, ?)', (username, password_hash, role_id))\n            db.commit()\n            flash('Utilisateur créé avec succès', 'success')\n            return redirect(url_for('users'))\n\n    return render_template('create_user.html')`)}
+          </section>
+        `
+      },
+      'stage2-arbo': {
+  title: 'Stage 2 — Arborescence du projet Photomaton',
+  subtitle: 'Organisation des fichiers et structure globale',
+  body: `
+    <section class="modal-section detail-grid">
+
+      <article class="detail-card">
+
+        <h4>Organisation du projet</h4>
+
+        <p class="card-copy">
+        Le projet Photomaton est structuré en plusieurs dossiers afin de séparer clairement
+        la logique applicative, les templates HTML et les ressources comme les images générées.
+        </p>
+
+        ${bullet([
+          'Dossier routes : gestion des fonctionnalités Flask.',
+          'Dossier templates : pages HTML (interface utilisateur).',
+          'Dossier ia_images : stockage des images générées.',
+          'Base SQLite : stockage des données (users, prompts…).',
+          'Organisation claire pour faciliter la maintenance.'
+        ])}
+
+        <h4>Pourquoi c’est important</h4>
+
+        ${bullet([
+          'Améliore la lisibilité du projet.',
+          'Facilite le debug et les modifications.',
+          'Permet de travailler proprement en équipe.',
+          'Respect des bonnes pratiques de développement.'
+        ])}
+
+      </article>
+
+
+      <article class="gallery-card">
+
+        <h4>Arborescence du projet</h4>
+
+        <div class="image-grid">
+
+          <img src="arborescence.png" class="portfolio-img">
+
+        </div>
+
+      </article>
+
+    </section>
+  `
+},
+      'stage2-prompts': {
+        title: 'Stage 2 — Gestion des prompts',
+        subtitle: 'Création, modification et exploitation des consignes',
+        body: `
+          <section class="modal-section detail-grid">
+            <article class="detail-card">
+              <h4>Contexte fonctionnel</h4>
+              <p class="card-copy">Les prompts servent à piloter le contenu ou le comportement attendu dans le photomaton. Il fallait donc créer une interface simple permettant de les gérer comme de vraies données métier.</p>
+              ${bullet([
+                'Ajout d’un prompt depuis un formulaire.',
+                'Modification d’un prompt existant.',
+                'Suppression ou archivage selon le besoin.',
+                'Réutilisation du prompt au moment de la génération ou de l’association.'
+              ])}
+            </article>
+            <article class="gallery-card">
+              <h4>Capture de l’interface</h4>
+              <div class="image-grid">
+              <img src="acceuill.png" class="portfolio-img">
+
+              <img src="modifier.png" class="portfolio-img">
+
+              <img src="création_prompt.png" class="portfolio-img">
+
+              <img src="pose.png" class="portfolio-img">
+
+              </div>
+             
+            </article>
+          </section>
+          <section class="modal-section">
+            ${codeBox('routes/prompts.py', 'Python / Flask', `@app.route('/prompts')\n@login_required\ndef list_prompts():\n    prompts = get_db().execute('SELECT id, title, content FROM prompts ORDER BY id DESC').fetchall()\n    return render_template('prompts.html', prompts=prompts)\n\n@app.route('/prompts/create', methods=['GET', 'POST'])\n@login_required\ndef create_prompt():\n    if request.method == 'POST':\n        title = request.form.get('title', '').strip()\n        content = request.form.get('content', '').strip()\n\n        if title and content:\n            db = get_db()\n            db.execute('INSERT INTO prompts(title, content, created_by) VALUES (?, ?, ?)', (title, content, session.get('user_id')))\n            db.commit()\n            flash('Prompt ajouté', 'success')\n            return redirect(url_for('list_prompts'))\n\n    return render_template('create_prompt.html')`)}
+          </section>
+        `
+      },
+      'stage2-roles': {
+  title: 'Stage 2 — Affichage conditionnel selon les rôles',
+  subtitle: 'Interface adaptée selon le profil connecté',
+  body: `
+    <section class="modal-section detail-grid">
+
+      <article class="detail-card">
+        <h4>Principe</h4>
+        <p class="card-copy">
+        L’objectif était de ne pas montrer les mêmes actions à tout le monde.
+        Certaines fonctions devaient être réservées à l’administrateur,
+        tandis que d’autres restaient disponibles à un utilisateur simple.
+        </p>
+
+        ${bullet([
+          'Masquer les boutons sensibles aux profils non autorisés.',
+          'Bloquer aussi côté serveur pour éviter un simple contournement visuel.',
+          'Rendre l’interface plus claire selon le contexte utilisateur.'
+        ])}
+
+
+           <h4>Apport technique</h4>
+         ${bullet([
+          'Séparation entre affichage et droit réel d’accès.',
+          'Meilleure expérience utilisateur.',
+          'Première logique de sécurisation fonctionnelle.'
+        ])}
+
+      </article>
+
+
+      <article class="gallery-card">
+
+     
+
+        <div class="image-grid">
+
+          <img src="indexx.png" class="portfolio-img">
+          <img src="index_lecture.png" class="portfolio-img">
+          <img src="index_modif.png" class="portfolio-img">
+
+        </div>
+
+      </article>
+
+    </section>
+
+    <section class="modal-section">
+      ${codeBox('templates/dashboard.html', 'HTML / Jinja', `{% if session.role == 'admin' %}\n  <a href="{{ url_for('users') }}" class="btn">Gérer les utilisateurs</a>\n  <a href="{{ url_for('admin_logs') }}" class="btn">Voir les logs</a>\n{% endif %}\n\n<a href="{{ url_for('list_prompts') }}" class="btn">Voir les prompts</a>`)}
+    </section>
+  `
+
+      },
+      'stage2-images': {
+        title: 'Stage 2 — Association image ↔ prompt et enregistrement',
+        subtitle: 'Lien entre image générée et consigne associée',
+        body: `
+          <section class="modal-section detail-grid">
+            <article class="detail-card">
+              <h4>Objectif métier</h4>
+              <p class="card-copy">Chaque image générée devait pouvoir être reliée au prompt qui a servi à sa création, afin de conserver une traçabilité exploitable dans l’application.</p>
+              ${bullet([
+                'Récupération du prompt sélectionné.',
+                'Enregistrement de l’image avec son chemin.',
+                'Association via une clé étrangère ou un identifiant lié.',
+                'Possibilité de retrouver l’historique de génération.'
+              ])}
+            </article>
+          
+            <article class="gallery-card">
+               <h4>Schéma fonctionnel</h4>
+
+              <div class="image-grid">
+              <img src="choix_pose.png" class="portfolio-img">
+             
+              
+
+
+            </div>
+            </article>
+          </section>
+          <section class="modal-section">
+            ${codeBox('save_generation.py', 'Python', `def save_generated_image(image_path, prompt_id):\n    db = get_db()\n    db.execute(\n        'INSERT INTO images(image_path, prompt_id) VALUES (?, ?)',\n        (image_path, prompt_id)\n    )\n    db.commit()`)}
+          </section>
+        `
+      },
+      'stage2-sauvegarde': {
+  title: 'Stage 2 — Sauvegarde des images générées et des prompts associés',
+  subtitle: 'Persistance dans le système de fichiers et la base',
+  body: `
+    <section class="modal-section detail-grid">
+
+      <article class="detail-card">
+        <h4>Principe de fonctionnement</h4>
+        <p class="card-copy">
+        Le projet devait stocker à la fois le fichier image généré et les informations
+        associées dans la base de données. Les images sont enregistrées dans un dossier
+        du projet, tandis que la base SQLite stocke uniquement la référence de l’image
+        associée au prompt.
+        </p>
+
+        ${bullet([
+          'Sauvegarde de l’image dans un dossier dédié (ia_images).',
+          'Enregistrement du chemin de l’image dans la base.',
+          'Association entre image et prompt via un identifiant.',
+          'Affichage ultérieur de l’image dans l’interface.'
+        ])}
+
+      </article>
+
+
+      <article class="gallery-card">
+
+        <h4>Captures du système</h4>
+
+        ${bullet([
+          'Organisation du dossier contenant les images générées.',
+          'Lien entre la base de données et le fichier image.',
+          'Exemple d’image générée affichée dans l’application.'
+        ])}
+
+        <div class="image-grid">
+          <img src="ia_dossier.png" class="portfolio-img">
+          <img src="table_prompt.png" class="portfolio-img">
+          <img src="resultat_ia.png" class="portfolio-img">
+        </div>
+
+      </article>
+
+    </section>
+
+
+    <section class="modal-section">
+
+      ${codeBox('routes/generation.py', 'Python / Flask', `# Génération et sauvegarde d'une image
+image_path = "ia_images/" + filename
+
+# Sauvegarde du fichier sur le serveur
+image.save(image_path)
+
+# Enregistrement dans la base
+db.execute(
+  "UPDATE prompts SET image_path = ? WHERE id = ?",
+  (image_path, prompt_id)
+)
+
+db.commit()`)}
+
+    </section>
+  `
+      },
+      'stage2-debug': {
+  title: 'Stage 2 — Correction de dysfonctionnements et amélioration des modules',
+  subtitle: 'Débogage, logs et validation après correction',
+  body: `
+    <section class="modal-section detail-grid">
+
+      <article class="detail-card">
+        <h4>Démarche de debug</h4>
+
+        <p class="card-copy">
+        Lors du développement de l’application Photomaton, certains comportements inattendus sont apparus : erreurs lors de la récupération de données, problèmes d’affichage ou logique incorrecte dans certaines routes Flask. 
+        L’utilisation de logs et de messages de diagnostic a permis d’identifier plus facilement les causes des dysfonctionnements.
+        </p>
+
+        ${bullet([
+          'Reproduire le bug afin de comprendre dans quel contexte il apparaît.',
+          'Consulter ou ajouter des logs pour suivre le traitement.',
+          'Identifier précisément la partie du code concernée.',
+          'Corriger la logique puis vérifier que le scénario fonctionne correctement.'
+        ])}
+
+      </article>
+
+
+      <article class="gallery-card">
+
+        <h4>Captures de debug</h4>
+
+        ${bullet([
+          'Affichage de logs dans le terminal Flask.',
+          'Vérification des valeurs récupérées dans les formulaires.',
+          'Observation des erreurs avant correction.',
+          'Contrôle du fonctionnement après correction.'
+        ])}
+
+        <div class="image-grid">
+
+          <img src="log_supression_succes.png" class="portfolio-img">
+
+          <img src="debug_valeurs.png" class="portfolio-img">
+
+          <img src="erreur_trace.png" class="portfolio-img">
+
+          <img src="debug_corrige.png" class="portfolio-img">
+
+        </div>
+
+      </article>
+
+    </section>
+
+
+    <section class="modal-section">
+
+      ${codeBox('routes/debug_generation.py', 'Python / Flask', `try:
+
+    prompt_id = request.form.get("prompt_id")
+
+    # Log pour vérifier la valeur récupérée
+    print("Prompt ID reçu :", prompt_id)
+
+    image_path = generate_image(prompt_id)
+
+    # Sauvegarde de l'image générée
+    save_generated_image(image_path, prompt_id)
+
+    print("Image générée et sauvegardée :", image_path)
+
+except Exception as e:
+
+    # Log d'erreur
+    app.logger.error(f"Erreur lors de la génération : {e}")
+
+    flash("Une erreur est survenue pendant la génération", "error")
+`)}
+
+    </section>
+  `
+
+      
+      },
+      'stage2-tests': {
+  title: 'Stage 2 — Tests manuels et validation des formulaires',
+  subtitle: 'Contrôle des parcours utilisateur dans l’application',
+  body: `
+    <section class="modal-section detail-grid">
+
+      <article class="detail-card">
+        <h4>Pourquoi tester</h4>
+        <p class="card-copy">
+        Même après avoir terminé le développement, il faut vérifier que les formulaires se comportent bien dans les cas normaux et dans les cas d’erreur. Cela évite de livrer une fonctionnalité instable.
+        </p>
+
+        ${bullet([
+          'Tester les champs obligatoires.',
+          'Vérifier les messages d’erreur.',
+          'Contrôler les redirections après succès.',
+          'Vérifier le comportement selon le rôle connecté.'
+        ])}
+
+      </article>
+
+
+      <article class="gallery-card">
+
+        <h4>Captures des tests réalisés</h4>
+
+        ${bullet([
+          'Exemples d’erreurs de validation des formulaires.',
+          'Création réussie d’un élément.',
+          'Suppression avec confirmation.',
+          'Vérification de la cohérence avec la base de données.'
+        ])}
+
+        <div class="image-grid">
+
+          <img src="erreur_util.jpg" class="portfolio-img">
+
+          <img src="supression_util.jpg" class="portfolio-img">
+
+          <img src="1.jpg" class="portfolio-img">
+          <img src="2.jpg" class="portfolio-img">
+
+        </div>
+
+      </article>
+
+    </section>
+
+
+    <section class="modal-section">
+
+      ${codeBox('routes/tests.py', 'Python / Flask', `# Exemple de validation formulaire
+
+title = request.form.get('title')
+content = request.form.get('content')
+
+# Vérification des champs obligatoires
+if not title or not content:
+    print("Erreur : champ obligatoire manquant")
+    flash("Tous les champs sont obligatoires", "error")
+
+else:
+    db = get_db()
+    db.execute(
+        "INSERT INTO prompts (title, content) VALUES (?, ?)",
+        (title, content)
+    )
+    db.commit()
+
+    print("Succès : prompt créé")
+    flash("Prompt ajouté avec succès", "success")
+`)}
+
+    </section>
+  `
+
+      },
+
+      'formation-gsb': {
+        title: 'Projet de formation — Application web de gestion des frais (GSB)',
+        subtitle: 'PHP / SQL / HTML — gestion de données métier',
+        body: `
+          <section class="modal-section detail-grid">
+            <article class="detail-card">
+              <h4>Présentation du projet</h4>
+              <p class="card-copy">Ce projet consistait à développer une application web permettant de gérer des visiteurs, des fiches de frais et le suivi des remboursements, avec une base de données SQL derrière.</p>
+              ${bullet([
+                'Analyse du besoin métier et des données à stocker.',
+                'Création des tables principales.',
+                'Développement d’interfaces de consultation et de saisie.',
+                'Utilisation de requêtes SQL pour exploiter les données.'
+              ])}
+            </article>
+            <article class="gallery-card">
+              <h4>Capture d’application</h4>
+              ${placeholder('Capture de l’application GSB')}
+            </article>
+          </section>
+          <section class="modal-section">
+            ${codeBox('gsb_example.php', 'PHP', `<?php
+$query = $pdo->prepare("SELECT id, nom, montant FROM fiche_frais ORDER BY id DESC");
+$query->execute();
+$fiches = $query->fetchAll();
+
+foreach ($fiches as $fiche) {
+  echo "<tr>";
+  echo "<td>" . htmlspecialchars($fiche['id']) . "</td>";
+  echo "<td>" . htmlspecialchars($fiche['nom']) . "</td>";
+  echo "<td>" . htmlspecialchars($fiche['montant']) . "</td>";
+  echo "</tr>";
+}
+?>`)}
+          </section>
+        `
+      },
+
+      'formation-transports': {
+        title: 'Projet de formation — Application web de gestion des transports',
+        subtitle: 'Application métier avec formulaires et suivi de données',
+        body: `
+          <section class="modal-section detail-grid">
+            <article class="detail-card">
+              <h4>Objectif</h4>
+              <p class="card-copy">Développer une interface permettant de manipuler des données métier dans un cadre web, avec des formulaires, des traitements côté serveur et une logique de suivi.</p>
+              ${bullet([
+                'Création d’interfaces de saisie.',
+                'Connexion à une base de données.',
+                'Consultation, ajout et modification d’enregistrements.',
+                'Structuration générale d’une petite application web.'
+              ])}
+            </article>
+            <article class="gallery-card">
+              <h4>Preuve visuelle</h4>
+              ${placeholder('Capture du projet transports')}
+            </article>
+          </section>
+        `
+      },
+
+      'formation-m2l': {
+        title: 'Projet de formation — Application de gestion pour un club sportif (M2L)',
+        subtitle: 'PHP / MariaDB / HTML — CRUD d’adhérents',
+        body: `
+          <section class="modal-section detail-grid">
+            <article class="detail-card">
+              <h4>But du projet</h4>
+              <p class="card-copy">Créer une application de gestion d’adhérents pour un club sportif, avec les opérations principales de consultation, ajout, modification et suppression.</p>
+              ${bullet([
+                'Gestion d’une base d’adhérents.',
+                'Mise en place d’un CRUD complet.',
+                'Organisation de l’interface pour l’utilisateur.',
+                'Exploitation des données via MariaDB.'
+              ])}
+            </article>
+            <article class="gallery-card">
+              <h4>Capture</h4>
+              ${placeholder('Capture M2L / liste des adhérents')}
+            </article>
+          </section>
+          <section class="modal-section">
+            ${codeBox('m2l_sql.sql', 'SQL', `SELECT id, nom, prenom, email
+FROM adherents
+ORDER BY nom ASC;`)}
+          </section>
+        `
+      },
+
+      'formation-import-sql': {
+        title: 'Projet de formation — Centralisation et import de données SQL',
+        subtitle: 'Traitement, import et consultation',
+        body: `
+          <section class="modal-section detail-grid">
+            <article class="detail-card">
+              <h4>Description</h4>
+              <p class="card-copy">Ce travail portait sur l’import de données dans une base et leur exploitation via des requêtes et parfois une interface web de consultation ou de modification.</p>
+              ${bullet([
+                'Préparation des données à importer.',
+                'Insertion dans la base SQL.',
+                'Contrôle du résultat après import.',
+                'Consultation ou mise à jour des données.'
+              ])}
+            </article>
+            <article class="detail-card">
+              <h4>Apports</h4>
+              ${bullet([
+                'Compréhension du cycle de vie de la donnée.',
+                'Rigueur dans les vérifications.',
+                'Manipulation plus sûre des enregistrements.'
+              ])}
+            </article>
+          </section>
+        `
+      },
+
+      'formation-lamp': {
+        title: 'Projet de formation — Mise en place d’un serveur web LAMP',
+        subtitle: 'Apache / PHP / MariaDB / VM',
+        body: `
+          <section class="modal-section detail-grid">
+            <article class="detail-card">
+              <h4>Infrastructure mise en place</h4>
+              <p class="card-copy">Le projet consistait à déployer un environnement LAMP dans une machine virtuelle afin d’héberger une application web avec sa base de données.</p>
+              ${bullet([
+                'Création ou préparation de la machine virtuelle.',
+                'Installation d’Apache.',
+                'Installation de PHP et MariaDB.',
+                'Vérification du bon fonctionnement global.'
+              ])}
+            </article>
+            <article class="gallery-card">
+              <h4>Capture serveur</h4>
+              ${placeholder('Capture VM / Apache / phpinfo / terminal')}
+            </article>
+          </section>
+          <section class="modal-section">
+            ${codeBox('lamp_steps.sh', 'Bash', `sudo apt update
+sudo apt install apache2 -y
+sudo apt install mariadb-server -y
+sudo apt install php libapache2-mod-php php-mysql -y
+sudo systemctl restart apache2`)}
+          </section>
+        `
+      },
+
+      'formation-glpi': {
+        title: 'Projet de formation — Déploiement de GLPI',
+        subtitle: 'Gestion d’incidents et de parc informatique',
+        body: `
+          <section class="modal-section detail-grid">
+            <article class="detail-card">
+              <h4>Objectif</h4>
+              <p class="card-copy">Déployer et configurer GLPI afin de disposer d’un outil de gestion de parc et d’incidents dans un environnement de test.</p>
+              ${bullet([
+                'Préparation de la base de données.',
+                'Déploiement de l’application GLPI.',
+                'Configuration initiale de l’outil.',
+                'Découverte de la logique de ticketing et de parc.'
+              ])}
+            </article>
+            <article class="gallery-card">
+              <h4>Interface GLPI</h4>
+              ${placeholder('Capture tableau de bord GLPI')}
+            </article>
+          </section>
+        `
+      },
+
+      'formation-java': {
+        title: 'Projet de formation — Application Java de gestion d’adhérents',
+        subtitle: 'Application lourde / POO',
+        body: `
+          <section class="modal-section detail-grid">Participation au diagnosti            <article class="detail-card">
+              <h4>Approche orientée objet</h4>
+              <p class="card-copy">Ce projet met davantage en avant la logique applicative, les classes métier et l’organisation du code dans une application Java.</p>
+              ${bullet([
+                'Création de classes représentant les entités métier.',
+                'Manipulation d’objets dans l’application.',
+                'Séparation entre données, logique et interface.',
+                'Utilisation des principes de base de la POO.'
+              ])}
+            </article>
+            <article class="gallery-card">
+              <h4>Capture IDE</h4>
+              ${placeholder('Capture IntelliJ / classes Java')}
+            </article>
+          </section>
+          <section class="modal-section">
+            ${codeBox('Adherent.java', 'Java', `public class Adherent {
+    private int id;
+    private String nom;
+    private String prenom;
+
+    public Adherent(int id, String nom, String prenom) {
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+    }
+
+    public String getNomComplet() {
+        return prenom + " " + nom;
+    }
+}`)}
+          </section>
+        `
+      },
+
+      'formation-sql-avance': {
+        title: 'Projet de formation — Travaux SQL avancés',
+        subtitle: 'Jointures, vues, triggers et logique de données',
+        body: `
+          <section class="modal-section detail-grid">
+            <article class="detail-card">
+              <h4>Contenu travaillé</h4>
+              <p class="card-copy">Cette partie regroupe des travaux SQL plus poussés, utiles pour renforcer la compréhension du modèle relationnel et de la logique de manipulation des données.</p>
+              ${bullet([
+                'Requêtes avec jointures.',
+                'Création de vues.',
+                'Travail sur des triggers ou règles automatiques.',
+                'Analyse de résultats et vérifications.'
+              ])}
+            </article>
+            <article class="detail-card">
+              <h4>Compétences développées</h4>
+              ${bullet([
+                'Structurer des requêtes plus complexes.',
+                'Mieux comprendre les liens entre tables.',
+                'Raisonner proprement sur la cohérence des données.'
+              ])}
+            </article>
+          </section>
+          <section class="modal-section">
+            ${codeBox('sql_avance.sql', 'SQL', `SELECT u.username, r.name AS role_name
+FROM users u
+JOIN roles r ON r.id = u.role_id
+ORDER BY u.username;
+
+CREATE VIEW v_users_roles AS
+SELECT u.id, u.username, r.name AS role_name
+FROM users u
+JOIN roles r ON r.id = u.role_id;`)}
+          </section>
+        `
+      },
+
+      'competences-langages': {
+        title: 'Compétences — Langages et frameworks',
+        subtitle: 'Panorama des technos mobilisées pendant la formation et les stages',
+        body: `
+          <section class="modal-section resource-grid">
+            <article class="resource-card">
+              <h4>Python / Flask</h4>
+              <p class="card-copy">Utilisés principalement dans le projet Photomaton pour développer la logique serveur, les routes, les formulaires et la gestion des données.</p>
+            </article>
+            <article class="resource-card">
+              <h4>PHP / SQL</h4>
+              <p class="card-copy">Utilisés dans plusieurs projets de formation pour développer des applications web et manipuler les bases de données relationnelles.</p>
+            </article>
+            <article class="resource-card">
+              <h4>Java / JavaScript / HTML / CSS</h4>
+              <p class="card-copy">Mobilisés selon les projets pour la programmation orientée objet, l’interactivité ou l’intégration front.</p>
+            </article>
+          </section>
+          <section class="modal-section">
+            ${resourceList([
+              ['Python', 'Back-end, logique, scripts, Flask'],
+              ['Flask', 'Routes, formulaires, templates, sessions'],
+              ['PHP', 'Applications web pédagogiques'],
+              ['SQL', 'Base de données, jointures, vues, structure'],
+              ['Java', 'POO, application lourde'],
+              ['HTML/CSS/JS', 'Interface et interaction']
+            ])}
+          </section>
+        `
+      },
+
+      'competences-outils': {
+        title: 'Compétences — Outils et environnements',
+        subtitle: 'Logiciels, serveurs et outils utilisés',
+        body: `
+          <section class="modal-section">
+            ${resourceList([
+              ['SQLite', 'Base légère pour le projet Photomaton'],
+              ['MariaDB', 'Projets web et exercices de base de données'],
+              ['Apache', 'Serveur web pour environnement LAMP'],
+              ['GLPI', 'Gestion de parc et d’incidents'],
+              ['Git', 'Versionnement du code'],
+              ['VS Code', 'Développement principal'],
+              ['PuTTY', 'Accès distant / terminal'],
+              ['Tailscale', 'Accès réseau selon contexte']
+            ])}
+          </section>
+        `
+      },
+
+      'competences-notions': {
+        title: 'Compétences — Notions à savoir expliquer',
+        subtitle: 'Points importants à valoriser à l’oral',
+        body: `
+          <section class="modal-section">
+            ${bullet([
+              'Architecture d’une application web : client, serveur, base de données.',
+              'Gestion des rôles et des droits d’accès.',
+              'Différence entre stockage fichier et stockage base.',
+              'Démarche de débogage avec logs et tests.',
+              'Validation des formulaires et contrôle métier.',
+              'Intérêt d’un portfolio structuré pour le BTS.'
+            ])}
+          </section>
+        `
+      },
+
+      'veille-cyber': {
+        
+        title: 'Veille technologique — Cybersécurité et vulnérabilités ',
+        subtitle: 'Feedly, sélection de sources et exploitation pour le BTS',
+        
+        body: `
+        
+          <section class="modal-section detail-grid">
+            
+            <article class="detail-card">
+              <h4>Sujet de veille</h4>
+              
+              <p class="card-copy">La veille porte sur la cybersécurité, les vulnérabilités logicielles, les menaces récentes et les bonnes pratiques. L’objectif est de rester connecté à l’actualité technique du domaine.</p>
+              ${bullet([
+                'Suivre les failles et vulnérabilités importantes.',
+                'Repérer les attaques ou tendances récentes.',
+                'Comprendre l’impact sur les systèmes et les entreprises.',
+                'Réutiliser l’information dans le portfolio et à l’oral.'
+              ])}
+            </article>
+            <article class="gallery-card">
+              
+              <h4>Preuve de veille</h4>
+              <img src="veille.png" class="portfolio-img">
+
+           
+              <a href="https://feedly.com/i/my/me" class="mini-link cyan-lite">
+  👁 Voir la veille
+</a>
+            </article>
+          </section>
+          <section class="modal-section">
+            ${resourceList([
+              ['Outil principal', 'Feedly'],
+              ['Thème', 'Cybersécurité / vulnérabilités'],
+              ['Usage', 'Lecture, sélection, synthèse'],
+              ['Exploitation', 'Oral BTS, portfolio, fiches']
+            ])}
+          </section>
+        `
+      },
+
+      'preuve-photomaton': {
+        title: 'Preuves — Projet Photomaton',
+        subtitle: 'Captures, code, schémas et logs',
+        body: `
+          <section class="modal-section gallery-grid">
+            <article class="gallery-card">
+              <h4>Page utilisateurs</h4>
+              ${placeholder('Capture users.png')}
+            </article>
+            <article class="gallery-card">
+              <h4>Page prompts</h4>
+              ${placeholder('Capture prompts.png')}
+            </article>
+            <article class="gallery-card">
+              <h4>Schéma SQLite</h4>
+              ${placeholder('Capture sqlite-schema.png')}
+            </article>
+          </section>
+          <section class="modal-section">
+            ${bullet([
+              'Ajouter ici tes vraies captures des pages principales.',
+              'Montrer une route Flask ou un extrait de CRUD.',
+              'Ajouter une capture du schéma de base de données.',
+              'Montrer un log ou une erreur corrigée pour valoriser le debug.'
+            ])}
+          </section>
+        `
+      },
+
+      'preuve-booster': {
+        title: 'Preuves — Stage Booster Informatique',
+        subtitle: 'Fiches d’activité, photos, notes et synthèse',
+        body: `
+          <section class="modal-section">
+            ${bullet([
+              'Photo d’un poste ou de l’environnement technique.',
+              'Extrait de rapport ou fiche d’activité.',
+              'Liste des tâches réalisées pendant le stage.',
+              'Tableau de correspondance avec les compétences BTS.'
+            ])}
+          </section>
+        `
+      },
+
+      'preuve-formation': {
+        title: 'Preuves — Projets de formation',
+        subtitle: 'Captures, extraits de code et documents techniques',
+        body: `
+          <section class="modal-section">
+            ${bullet([
+              'Captures d’écran des applications développées en cours.',
+              'Extraits SQL, PHP ou Java à montrer rapidement.',
+              'Schémas MCD / MLD ou diagrammes simples.',
+              'Comptes rendus ou docs techniques réalisés pendant la formation.'
+            ])}
+          </section>
+        `
+      }
+    };
+
+    const openDetail = (key) => {
+      const detail = detailTemplates[key];
+      if (!detail) return;
+      detailTitle.textContent = detail.title;
+      detailSubtitle.textContent = detail.subtitle;
+      detailBody.innerHTML = detail.body;
+
+      detailView.classList.add('open');
+      detailView.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('locked');
+
+      detailBody.querySelectorAll('.accordion-trigger').forEach(trigger => {
+        trigger.addEventListener('click', () => {
+          trigger.closest('.accordion-item')?.classList.toggle('open');
+        });
+      });
+    };
+
+    const closeDetailModal = () => {
+      detailView.classList.remove('open');
+      detailView.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('locked');
+    };
+
+    document.querySelectorAll('.open-detail').forEach(btn => {
+      btn.addEventListener('click', () => {
+        openDetail(btn.dataset.detail);
+      });
+    });
+
+    closeDetail.addEventListener('click', closeDetailModal);
+
+    detailView.addEventListener('click', (e) => {
+      if (e.target === detailView) closeDetailModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        mobilePanel.classList.remove('open');
+        menuToggle.classList.remove('is-open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        closeDetailModal();
+      }
+    });
+
+    updateProjectDisplay();
+  </script>
+</body>
+</html>
